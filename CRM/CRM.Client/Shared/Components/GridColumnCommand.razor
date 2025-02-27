@@ -1,0 +1,51 @@
+﻿@typeparam TCommandData
+@using System.Linq.Expressions
+@using Humanizer
+
+    
+
+@code
+{
+    /// <summary>
+    /// Actions for BlazorGrid.
+    /// </summary>
+    [Parameter]
+    public List<Button<TCommandData>> Actions { get; set; }
+
+    [CascadingParameter]
+    public Grid<TCommandData> OwnerGrid { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public Expression<Func<TCommandData, object>> Expression { get; set; }
+
+    [Parameter]
+    public string Format { get; set; }
+
+    [Parameter]
+    public RenderFragment<TCommandData> ChildContent { get; set; }
+
+    private Func<TCommandData, object> compiledExpression;
+    private Expression lastCompiledExpression;
+    private RenderFragment headerTemplate;
+    private RenderFragment<TCommandData> cellTemplate;
+
+    protected override void OnInitialized()
+    {
+        OwnerGrid.AddColumn(this);
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        if (lastCompiledExpression != Expression)
+        {
+            compiledExpression = Expression?.Compile();
+            lastCompiledExpression = Expression;
+        }
+    }
+
+    
+}

@@ -1,0 +1,67 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@layout MainLayout
+@inject IAuthorizationService AuthorizationService
+@inject CRM.Client.States.AppState State
+@inject IComponentService Comp;
+
+@* <CustomTitle Main="Dashboard"></CustomTitle> *@
+<CustomTitle Main="@("PhysicalPerson.Birthday".Translate())"></CustomTitle>
+
+<div class="container-fluid">
+        <div class="row">
+            <div class="content-contact-page">
+                <Indicator Context="clients">
+                    <Grid Items="@BirthdayClients" class="table">
+                        <GridColumnCommand Actions="actions"></GridColumnCommand>
+                        <GridColumn TRowData="ContactListItemModel" Expression="c => c.FullName"></GridColumn>
+                        <GridColumn TRowData="ContactListItemModel" Expression="c => c.BirthDate" Format="dd-MM-yyyy"></GridColumn>
+                        <GridColumn TRowData="ContactListItemModel" Expression="c => c.Age"></GridColumn>
+                    </Grid>
+                </Indicator>
+                <div class="row">
+                    <div class="col">
+                        <CustomPagination MetaData="MetaData" Spread="10" SelectedPage="@SelectedPage" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await authenticationStateTask).User;
+        if (user.IsInRole("CRMRole"))
+        {
+            var d = user.FindFirst(x => x.Type == ClaimTypes.Role && x.Value == "CRMRole");
+
+            bool full = bool.Parse(d.Properties["Basic"]);
+            bool basic = bool.Parse(d.Properties["Full"]);
+        }
+
+        await GetBirthdayClients(MetaData);
+    }
+
+
+    private async Task Click()
+    {
+        //await State.UpdateClient(new Operation.Models.RequestModels.ClientInfoContract());
+        //int inn = 2;
+        //await State.GetClientInfo<List<ContactInfoContract>>($"/api/contact({inn})?$select=value,type&$expand=contactcomments($select=text,creator)");
+        //await State.GetClientInfo<ContactListItemModel>($"/api/physicalPerson({inn})?$select=pinnumber, fullname");
+        //await State.GetClientInfo<CompanyListItemModel>($"/api/company({inn})?$select=companyname");
+        //await State.GetClientInfo<List<DocumentContract>>($"/api/document({inn})?$select=documentnumber,documenttype");
+        //await State.GetClientInfo<List<RelationContract>>($"/api/relation({inn})?$select=clientInn, relationtype");
+        //await State.GetClientInfo<List<CommentContract>>($"/api/comment({inn})?$select=text,creator");
+
+        //await State.GetClientInfo<List<TagContract>>($"/api/tag(517)?$select=name");
+    }
+}

@@ -1,0 +1,81 @@
+﻿@using System.Reflection
+@using Zircon.Core.OperationModel
+@using Zircon.Core
+@inject IJSRuntime JS
+
+<div class="dropdown position-relative" @ref="@CurrentDropdown">
+    @if (!ReadOnly)
+    {
+        <MatTextField @ref="_matTextField" @bind-Value="DropDownValue" OnInput="OnDropDownInput" Class="" Label="@FieldName" IconTrailing="true" Outlined="true" @onclick="@HandleClick"></MatTextField> 
+    }
+    else
+    {
+        <div class="border-bottom dropdown-label">
+            <div>
+                <span>@FieldName:</span>
+                <strong>@(string.Equals(DropDownValue, FieldName) ? "" : DropDownValue)</strong>
+            </div>
+        </div>
+    }
+    <CascadingValue name="Dropdown" Value="@this">
+        <div class="dropdown-menu position-absolute shadow-lg">
+            @ChildContent
+        </div>
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment InitialTip { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public EventCallback<ISourceItem> OnSelected { get; set; }
+    [Parameter]
+    public EventCallback<string> Filter { get; set; }
+    [Parameter]
+    public bool ReadOnly { get; set; }
+    [Parameter]
+    public string FieldName { get; set; }
+    [Parameter]
+    public string DropDownValue { get; set; }
+    MatTextField<string> _matTextField;
+
+    ElementReference CurrentDropdown;
+
+
+    private bool show = false;
+    private RenderFragment Tip;
+
+    protected override void OnInitialized()
+    {
+        this.Tip = InitialTip;
+    }
+    public async Task HandleSelect(ISourceItem item, RenderFragment<ISourceItem> contentFragment, PropertyInfo propertyInfo, IModel Parent)
+    {
+        this.Tip = contentFragment.Invoke(item);
+        this.DropDownValue = item.Value;
+        this.show = false;
+
+        var property = propertyInfo;
+        if (property != null)
+        {
+            property.SetValue(Parent, Convert.ToInt32(item.Key.ToString()), null);
+        }
+
+        StateHasChanged();
+        await this.OnSelected.InvokeAsync(item);
+    }
+
+    public async Task HandleClick()
+    {
+        await JS.InvokeVoidAsync("SelectDropDownText", _matTextField.Id);
+        await JS.InvokeVoidAsync("dealScripts.toggleDropdown", CurrentDropdown);
+    }
+
+    private void OnDropDownInput(ChangeEventArgs obj)
+    {
+        Filter.InvokeAsync(obj.Value.ToString());
+    }
+
+}

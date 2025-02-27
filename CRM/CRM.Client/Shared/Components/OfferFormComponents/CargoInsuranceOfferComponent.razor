@@ -1,0 +1,391 @@
+﻿@inherits BaseComponent
+
+<EditForm EditContext="EditContext">
+    <ObjectGraphDataAnnotationsValidator />
+    <ValidationSummary></ValidationSummary>
+    <div class="card-search">
+        <CardComponent Header="@("Client.Beneficiary".Translate())" HeaderIconClass="">
+            <ClientSearchComponent ClientSelected="@(BeneficiarySelected)" ClientFromParameter="@OfferModel.Beneficiary" ReadOnly="ReadOnly"></ClientSearchComponent>
+            <ValidationMessage For="@(() => OfferModel.Beneficiary)" />
+        </CardComponent>
+    </div>
+    <br />
+    <div class="row">
+        @if (DealModel?.Client?.ClientType == ClientType.Company)
+        {
+            <div class="col-3 form-group">
+                @if (ReadOnly)
+                {
+                    <div class="readonly-input">
+                        <span>
+                            <span>@("OfferModel.CompanyActivityType".Translate())</span>
+                            <strong>@OfferModel.CompanyActivityType</strong>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <MatTextField @bind-Value="OfferModel.CompanyActivityType" Label="@("OfferModel.CompanyActivityType".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                    <ValidationMessage For="@(() => OfferModel.CompanyActivityType)" />
+                }
+            </div>
+        }
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.CargoFeatures".Translate())</span>
+                        <strong>@OfferModel.CargoFeatures</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.CargoFeatures" Label="@("OfferModel.CargoFeatures".Translate() + "*")" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.CargoFeatures)" />
+            }
+        </div>
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.AnyInfo".Translate())</span>
+                        <strong>@OfferModel.AnyInfo</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.AnyInfo" Label="@( "*" + "OfferModel.AnyInfo".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.AnyInfo)" />
+            }
+        </div>
+
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.PolicyPeriodOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PolicyPeriodOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.CurrencyOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.CurrencyOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.PaymentTypeOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PaymentTypeOid)" />
+        </div>
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.Commission".Translate())</span>
+                        <strong>@OfferModel.Commission</strong>
+                    </span>
+                </div>
+            }
+            else
+            { 
+                <MatTextField @bind-Value="OfferModel.Commission" Label="@("OfferModel.Commission".Translate()+ "*")" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.Commission)" />
+            }
+        </div>
+
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.InvoiceNumber".Translate())</span>
+                        <strong>@OfferModel.InvoiceNumber</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.InvoiceNumber" Label="@("OfferModel.InvoiceNumber".Translate()+ "*")" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.InvoiceNumber)" />
+            }
+        </div>
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.InvoiceAmountOfCargo".Translate())</span>
+                        <strong>@OfferModel.InvoiceAmountOfCargo</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.InvoiceAmountOfCargo" Label="@("OfferModel.InvoiceAmountOfCargo".Translate()+ "*")" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.InvoiceAmountOfCargo)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.ShippingCosts".Translate())</span>
+                        <strong>@OfferModel.ShippingCosts</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.ShippingCosts" Label="@("OfferModel.ShippingCosts".Translate()+ "*")" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.ShippingCosts)" />
+            }
+        </div>
+
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.Packaging)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.Packaging)" />
+        </div>
+        @if (OfferModel.Packaging == 6)
+        {
+            <div class="col-3 form-group">
+                @if (ReadOnly)
+                {
+                    <div class="readonly-input">
+                        <span>
+                            <span>@("OfferModel.PackagingOther".Translate())</span>
+                            <strong>@OfferModel.PackagingOther</strong>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <MatTextField @bind-Value="OfferModel.PackagingOther" Label="@("OfferModel.PackagingOther".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                    <ValidationMessage For="@(() => OfferModel.PackagingOther)" />
+                }
+            </div>
+        }
+
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.TransportationKind)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.TransportationKind)" />
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.Route".Translate())</span>
+                        <strong>@OfferModel.Route</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.Route" Label="@("OfferModel.Route".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                @*@if (RouteCountries != null && RouteCountries.Count > 0)
+                {<label for="TravelClaimModel.IncidentPlace">@("OfferModel.Route".Translate())</label>
+
+                    <InputSelect ValueExpression="@(()=>OfferModel.RouteCountryId)"
+                                 Value="@OfferModel.RouteCountryId"
+                                 ValueChanged="@((string value) => OnRouteValueChanged(value))"
+                                 class="form-control mb-2" id="endpoint_country">
+                        @foreach (var country in RouteCountries)
+                        {
+                            <option value="@country">@country</option>
+                        }
+                    </InputSelect>
+                }
+
+                @if (RouteCities != null && RouteCities.Count > 0)
+                {
+                    <InputSelect @bind-Value="@OfferModel.RouteCityId" class="form-control" id="endpoint_city">
+                        @foreach (var city in RouteCities)
+                                {
+                            <option value="@city">@city</option>
+                                }
+                    </InputSelect>
+                }*@
+                <ValidationMessage For="@(() => OfferModel.Route)" />
+            }
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.CargoDescription".Translate())</span>
+                        <strong>@OfferModel.CargoDescription</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <span>@("OfferModel.CargoDescription".Translate() + "*")</span>
+                <TextArea cols="30" rows="10" class="form-control" @bind-Value="OfferModel.CargoDescription"></TextArea>
+                <ValidationMessage For="@(() => OfferModel.CargoDescription)" />
+            }
+        </div>
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.LostHistoryForTheLastFiveYears".Translate())</span>
+                        <strong>@OfferModel.LostHistoryForTheLastFiveYears</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <span>@("OfferModel.LostHistoryForTheLastFiveYears".Translate() + "*")</span>
+                <TextArea cols="30" rows="10" class="form-control" @bind-Value="OfferModel.LostHistoryForTheLastFiveYears"></TextArea>
+                <ValidationMessage For="@(() => OfferModel.LostHistoryForTheLastFiveYears)" />
+            }
+        </div>
+
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.InvoiceDate".Translate())</span>
+                        <strong>@OfferModel.InvoiceDate?.ToLongDateString()</strong>
+                    </span>
+                </div>
+            }
+            else
+            { <span>@("OfferModel.InvoiceDate".Translate() + "*")</span>
+                <DatePickerFor Class="form-control" @bind-Value="OfferModel.InvoiceDate" Id="OfferModel.InvoiceDate" PlaceHolder="@("OfferModel.InvoiceDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())"></DatePickerFor>
+                <ValidationMessage For="@(() => OfferModel.InvoiceDate)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.ProbableShippingDate".Translate())</span>
+                        <strong>@OfferModel.ProbableShippingDate?.ToLongDateString()</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <span>@("OfferModel.ProbableShippingDate".Translate() + "*")</span>
+                <DatePickerFor Class="form-control" @bind-Value="OfferModel.ProbableShippingDate" Id="OfferModel.ProbableShippingDate" PlaceHolder="@("OfferModel.ProbableShippingDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())"></DatePickerFor>
+                <ValidationMessage For="@(() => OfferModel.ProbableShippingDate)" />
+            }
+
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.ProbableDeliveryDate".Translate())</span>
+                        <strong>@OfferModel.ProbableDeliveryDate?.ToLongDateString()</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <span>@("OfferModel.ProbableDeliveryDate".Translate() + "*")</span>
+                <DatePickerFor Class="form-control" @bind-Value="OfferModel.ProbableDeliveryDate" Id="OfferModel.ProbableDeliveryDate" PlaceHolder="@("OfferModel.ProbableDeliveryDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())"></DatePickerFor>
+                <ValidationMessage For="@(() => OfferModel.ProbableDeliveryDate)" />
+            }
+        </div>
+      
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.StartPoint".Translate())</span>
+                        <strong>@OfferModel.StartPoint</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+
+                @if (StartPointCountries != null && StartPointCountries.Count > 0)
+                {<label for="TravelClaimModel.IncidentPlace">@("OfferModel.StartPoint".Translate())</label>
+
+                    <InputSelect ValueExpression="@(()=>OfferModel.StartPointCountryId)"
+                                 Value="@OfferModel.StartPointCountryId"
+                                 ValueChanged="@((string value) => OnStartPointValueChanged(value))"
+                                 class="form-control mb-2" id="startpoint_country">
+                        @foreach (var country in StartPointCountries)
+                        {
+                            <option value="@country">@country</option>
+                        }
+                    </InputSelect>
+                }
+
+                @if (StartPointCities != null && StartPointCities.Count > 0)
+                {
+                    <InputSelect @bind-Value="@OfferModel.StartPointCityId" class="form-control" id="startpoint_city">
+                        @foreach (var city in StartPointCities)
+                                {
+                            <option value="@city">@city</option>
+                                }
+                    </InputSelect>
+                } <ValidationMessage For="@(() => OfferModel.StartPoint)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.DestinationPoint".Translate())</span>
+                        <strong>@OfferModel.DestinationPoint</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                @if (EndPointCountries != null && EndPointCountries.Count > 0)
+                {<label for="TravelClaimModel.IncidentPlace">@("OfferModel.DestinationPoint".Translate())</label>
+
+                    <InputSelect ValueExpression="@(()=>OfferModel.EndPointCountryId)"
+                                 Value="@OfferModel.EndPointCountryId"
+                                 ValueChanged="@((string value) => OnEndPointValueChanged(value))"
+                                 class="form-control mb-2" id="endpoint_country">
+                        @foreach (var country in EndPointCountries)
+                        {
+                            <option value="@country">@country</option>
+                        }
+                    </InputSelect>
+                }
+
+                @if (EndPointCities != null && EndPointCities.Count > 0)
+                {
+                    <InputSelect @bind-Value="@OfferModel.EndPointCityId" class="form-control" id="endpoint_city">
+                        @foreach (var city in EndPointCities)
+                                {
+                            <option value="@city">@city</option>
+                                }
+                    </InputSelect>
+                } <ValidationMessage For="@(() => OfferModel.StartPoint)" />
+                <ValidationMessage For="@(() => OfferModel.DestinationPoint)" />
+            }
+        </div>
+    </div>
+    <br />
+</EditForm>
+
+<div style="display:none">
+    <CRM.Client.Shared.Components.PrintOut.Offers.CargoPrintOut DealModel="DealModel" OfferModel="OfferModel"></CRM.Client.Shared.Components.PrintOut.Offers.CargoPrintOut>
+</div>
+

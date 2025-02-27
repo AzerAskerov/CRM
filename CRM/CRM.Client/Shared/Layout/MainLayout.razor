@@ -1,0 +1,44 @@
+﻿@inherits MainLayoutBase
+@using Ababil.Components.Core
+@using Ababil.Components.Core.Configuration
+
+<AuthorizeView>
+    <Authorized>
+        @*<RoleComponent>*@
+            <BlazoredModal />
+            <MainHeader></MainHeader>
+
+            <main>
+                <!--Menu Section-->
+                <LeftSideNavMenu></LeftSideNavMenu>
+                <!--End Menu Section-->
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="page-header w-100">
+                            <!--Main Page Menu-->
+                            <MainContentNavMenu></MainContentNavMenu>
+                            <!--End Main Page Menu-->
+                    </div>
+                </div>
+            </div>
+                @Body
+
+               <MessageBoxList Position="MessageBoxPosition.TopRight" Timeout="60" />
+
+                <!--Right Menu Bar Section-->
+                <RightSideBar></RightSideBar>
+                <!--End Right Menu Bar Section-->
+
+
+        </main>
+
+        <SlidePanelTemplate></SlidePanelTemplate>
+
+        <MainFooter></MainFooter>
+
+
+
+		 @*</RoleComponent>*@
+</Authorized>
+</AuthorizeView>

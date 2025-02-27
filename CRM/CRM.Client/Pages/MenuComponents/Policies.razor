@@ -1,0 +1,52 @@
+﻿@inherits BaseComponent
+@inject IJSRuntime JsRuntime
+
+<br />
+
+<div class="container-fluid" style="overflow:auto; padding:20px 0;">
+
+    @foreach (var p in InforceProductList)
+    {
+        <span class="badge badge-success">@p.ProductName</span>
+    }
+
+    @foreach (var f in InOtherStatusProductList)
+    {
+        <span class="badge badge-warning">@f.ProductName</span>
+    }
+
+    <br />
+    <br />
+
+    @if (RoleModel.IsOwnClient || RoleModel.Full)
+    {
+
+            <table  class="table">
+                <thead>
+                    <tr>
+                        <td>PolicyNumber</td>
+                        <td>Status</td>
+                        <td>ProductName</td>
+                        <td>ArchiveStatus</td>
+                        <td>AddendumCount</td>
+                        <td>Product</td>
+                    </tr>
+                </thead>
+               <tbody>
+
+                   @foreach (var policy in policies)
+                   {
+                       <tr>
+                           <td style="cursor:pointer;" @onclick="@(async () => await NavigateToPolicy(policy))">@policy.PolicyNumber</td>
+                           <td>@policy.Status</td>
+                           <td>@policy.ProductName</td>
+                           <td>@policy.ArchiveStatus</td>
+                           <td>@policy.AddendumCount</td>
+                           <td>@policy.Product</td>
+                       </tr>
+                   }
+               </tbody>
+            </table>
+    }
+</div>
+

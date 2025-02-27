@@ -1,0 +1,111 @@
+﻿@inherits BaseComponent
+@typeparam TItem
+@using Zircon.Core.OperationModel
+@using System.Linq.Expressions
+@using CRM.Operation.Models
+@using Zircon.Core
+@using System.Reflection
+@using Newtonsoft.Json
+
+<DropDown OnSelected="OnSelected" Filter="RefreshItems" ReadOnly="ReadOnly" DropDownValue="@DropDownValue" FieldName="@(("DropDown." + PropertyInfo.Name + (Required ? "*" : "")).Translate())">
+    <InitialTip>@DropDownValue</InitialTip>
+    <ChildContent>
+        <div style="height: auto; max-height: 200px; overflow-x: hidden;">
+            @foreach (var item in _filteredItems)
+            {
+                <DropdownListItem Item="@item"
+                                  Parent="@Parent"
+                                  PropertyInfo="@PropertyInfo"
+                                 >
+
+                    @item.Value
+                </DropdownListItem>
+                <div class="dropdown-divider"></div>
+            }
+        </div>
+    </ChildContent>
+</DropDown>
+
+
+@code
+{
+    [Parameter]
+    public IModel Parent { get; set; }
+
+    [Parameter]
+    public EventCallback<ISourceItem> OnSelected { get; set; }
+
+    [Parameter]
+    public Expression<Func<TItem>> ItemExpression { get; set; }
+
+    private string DropDownValue { get; set; }
+    private IEnumerable<ISourceItem> _dropDownItems = new List<ISourceItem>();
+    private IEnumerable<ISourceItem> _filteredItems = new List<ISourceItem>();
+    private PropertyInfo PropertyInfo { get; set; }
+    private bool _readOnly;
+
+    [Parameter]
+    public bool ReadOnly
+    {
+        get => _readOnly;
+        set
+        {
+            _readOnly = value;
+
+        }
+    }
+
+    private bool required;
+
+    [Parameter]
+    public bool Required
+    {
+        get => required;
+        set
+        {
+            required = value;
+
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        PropertyInfo = ((ItemExpression.Body as MemberExpression)?.Member as PropertyInfo);
+        await LoadItems();
+    }
+
+    public async Task LoadItems()
+    {
+        var state = await State.Sourceloader(new SourceLoaderModel()
+        {
+            ParentPropertyNamespace = Parent.GetType().AssemblyQualifiedName,
+            PropertyName = PropertyInfo.Name,
+            ParentAsJson = JsonConvert.SerializeObject(Parent)
+        });
+
+        _dropDownItems = state.Model;
+        _filteredItems = state.Model;
+
+        RefreshItems();
+    }
+    protected override Task OnParametersSetAsync()
+    {
+        RefreshItems();
+        return base.OnParametersSetAsync();
+
+    }
+    private void RefreshItems(string filter = null)
+    {
+
+        _filteredItems = string.IsNullOrEmpty(filter) ? _dropDownItems : _dropDownItems.Where(x => x.Value.ToLowerInvariant().Contains(filter.ToLowerInvariant()));
+
+        //for define Initial Tip  of drop down
+        string keyOfDropDown = PropertyInfo.GetValue(Parent, null)?.ToString();
+        if (!string.IsNullOrEmpty(keyOfDropDown) && keyOfDropDown != "0")
+            DropDownValue = _filteredItems.FirstOrDefault(x => x.Key.ToString() == keyOfDropDown)?.Value;
+        else
+            DropDownValue = ("DropDown." + PropertyInfo.Name).Translate();
+        StateHasChanged();
+    }
+}
+

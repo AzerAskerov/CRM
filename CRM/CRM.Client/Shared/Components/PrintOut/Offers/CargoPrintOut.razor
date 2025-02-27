@@ -1,0 +1,162 @@
+﻿@inherits BaseComponent
+@using CRM.Data.Enums;
+<div id="print">
+    <h1 class="general-title">@OfferTypeEnum.CargoInsurance.ToString().Translate()</h1>
+    <div class="with-underline">
+        <h6> @LocalizationExtension.Translate("CardComponent.OnlyInsured")</h6>
+        <p>@DealModel?.Client?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6>
+            @("OfferModel.PinOrTin".Translate())
+        </h6>
+        @if (DealModel?.Client?.ClientType == ClientType.Company)
+        {
+            <p> @DealModel?.Client?.Documents?.FirstOrDefault(x => x.DocumentType == 2)?.DocumentNumber</p>
+        }
+        else
+        {
+            <p>@DealModel?.Client?.PinNumber</p>
+        }
+    </div>
+    <div class="with-underline">
+        <h6> @("Client.Beneficiary".Translate())</h6>
+        <p>@OfferModel?.Beneficiary?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.CargoFeatures".Translate())</h6>
+        <p>@OfferModel?.CargoFeatures</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.PaymentTypeOid".Translate())</h6>
+        <p>@OfferModel?.PaymentType</p>
+    </div>
+    <div class="with-underline">
+        <h6>  @("OfferModel.CurrencyOid".Translate())</h6>
+        <p>@OfferModel?.Currency</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.PolicyPeriodOid".Translate())</h6>
+        <p>@OfferModel?.PolicyPeriod</p>
+    </div>
+    @if (DealModel?.Client?.ClientType == ClientType.Company)
+    {
+        <div class="with-underline">
+            <h6> @("OfferModel.CompanyActivityType".Translate())</h6>
+            <p>@OfferModel?.CompanyActivityType</p>
+        </div>
+    }
+    <div class="with-underline">
+        <h6>  @("OfferModel.AnyInfo".Translate())</h6>
+        <p>@OfferModel?.AnyInfo</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.SumInsured".Translate())</h6>
+        <p>@DealModel?.SumInsured</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("LanguageSelection".Translate())</h6>
+        <p>@DealModel?.OfferLang</p>
+    </div>
+
+    <div class="with-underline">
+        <h6>  @("DealMode.ClientPhoneNumber".Translate())</h6>
+        <p>@DealModel?.ClientPhoneNumber</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("DealMode.SurveyContactInfo".Translate())</h6>
+        <p>@DealModel?.SurveyContactInfo</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.ShippingCosts".Translate())</h6>
+        <p>@OfferModel?.ShippingCosts</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.Commission".Translate())</h6>
+        <p>@OfferModel?.Commission</p>
+    </div>
+
+
+    @******@
+    <div class="with-underline">
+        <h6>@("OfferModel.CargoDescription".Translate())</h6>
+        <p>@OfferModel?.CargoDescription</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.InvoiceAmountOfCargo".Translate())</h6>
+        <p>@OfferModel?.InvoiceAmountOfCargo</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.InvoiceDate".Translate())</h6>
+        <p>@OfferModel?.InvoiceDate?.ToString("dd.MM.yyyy")</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.ProbableShippingDate".Translate())</h6>
+        <p>@OfferModel?.ProbableShippingDate</p>
+    </div>
+    <div class="with-underline">
+        <h6>  @("OfferModel.ProbableDeliveryDate".Translate())</h6>
+        <p>@OfferModel?.ProbableDeliveryDate</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.InvoiceNumber".Translate())</h6>
+        <p>@OfferModel?.InvoiceNumber</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.Packaging".Translate())</h6>
+        <p>@OfferModel?.PackagingName</p>
+    </div>
+    @if (!string.IsNullOrEmpty(OfferModel?.PackagingOther))
+    {
+        <div class="with-underline">
+            <h6> @("OfferModel.PackagingOther".Translate())</h6>
+            <p>@OfferModel?.PackagingOther</p>
+        </div>
+    }
+    <div class="with-underline">
+        <h6>@("OfferModel.StartPointCountryId".Translate())</h6>
+        <p>@OfferModel?.StartPointCountryId</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.StartPointCityId".Translate())</h6>
+        <p>@OfferModel?.StartPointCityId</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.EndPointCountryId".Translate())</h6>
+        <p>@OfferModel?.EndPointCountryId</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.EndPointCityId".Translate())</h6>
+        <p>@OfferModel?.EndPointCityId</p>
+    </div>
+    <div class="with-underline">
+        <h6>  @("OfferModel.Route".Translate())</h6>
+        <p>@OfferModel?.Route</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("DropDown.TransportationKind".Translate())</h6>
+        <p>@OfferModel?.TransportationKindName</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.LostHistoryForTheLastFiveYears".Translate())</h6>
+        <p>@OfferModel?.LostHistoryForTheLastFiveYears</p>
+    </div>
+
+    <div class="sign-area">
+
+        <div class="sign-title-container">
+            <h6 class="sign-title">@LocalizationExtension.Translate("CardComponent.OnlyInsured")</h6>
+            <span>@DealModel?.Client?.FullConcatName</span>
+        </div>
+
+        <div class="sign-container">
+            <span>@LocalizationExtension.Translate("CardComponent.OnlyInsured")</span>
+            <div class="sign-line"></div>
+            <span>@LocalizationExtension.Translate("CardComponent.Signature")</span>
+        </div>
+    </div>
+
+
+</div>
+
+

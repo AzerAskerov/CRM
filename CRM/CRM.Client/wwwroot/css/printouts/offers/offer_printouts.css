@@ -1,0 +1,22 @@
+﻿*,
+::before,
+::after {
+    box-sizing:border-box;
+}
+
+.general-title {
+    color:orange;
+}
+
+.general-title::before {
+    content: "";
+    width:100%;
+    height:10px;
+    background-color:black;
+    border:dotted 5px orange;
+}
+
+div {
+    display:flex;
+    border-bottom:1px solid orange;
+}

@@ -1,0 +1,221 @@
+﻿@using CRM.Client.Helpers
+@inherits BaseComponent
+@inject IComponentService Comp;
+
+@if (Place == "ContactCard")
+{
+    <div class="row align-items-center flex-nowrap">
+        <div class="col-4">
+            <select class="form-control" @bind="SearchCriteria">
+                <option value="pin">@("Client.PinNumber".Translate())</option>
+                <option value="tin">@("Client.TinNumber".Translate())</option>
+                <option value="name">@("Client.Name".Translate())</option>
+                <option value="companyname">@("Client.CompanyNameSearch".Translate())</option>
+                <option value="number">@("Client.ContactValue".Translate())</option>
+                <option value="document">@("Client.DocumentNumber".Translate())</option>
+            </select>
+        </div>
+        
+        <div class="col-8">
+            <BlazoredTypeahead SearchMethod="SearchClient" Debounce="1400" AdditionalAttributes="additionalProperties"
+                             @bind-Value="SelectedClient">
+                <SelectedTemplate>
+                    <input class="form-control is-valid"
+                           value=@SearchResultHelper.BuildCompanyInputValueResult(context) />
+                </SelectedTemplate>
+                <ResultTemplate>
+
+                    @if (SearchResultHelper.HasCompanyInformation(context))
+                        {
+                        <p>@SearchResultHelper.BuildCompanyInfo(context)</p>
+                        <br />
+                        <br />
+                        @foreach (var tag in context.Tags)
+                            {
+                            <div class="mdc-chip">
+                                <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                            </div>
+                            }
+                        }
+                    @if (SearchResultHelper.HasPersonalInformation(context))
+                        {
+                        <p>@SearchResultHelper.BuildPersonalInfo(context)</p>
+                        <br />
+                        <br />
+                        @foreach (var tag in context.Tags)
+                            {
+                            <div class="mdc-chip">
+                                <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                            </div>
+                            }
+                        }
+                    <br>
+                    <br>
+                   
+                </ResultTemplate>
+            </BlazoredTypeahead>
+        </div>
+    </div>
+
+    <style>
+        .blazored-typeahead {
+            all: unset;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .blazored-typeahead:focus {
+            background: transparent !important;
+            border: none !important;
+        }
+        .blazored-typeahead__input {
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+            height: 40px !important;
+            color: #495057 !important;
+            border: 1px solid #ced4da !important;
+            border-radius: .25rem !important;
+        }
+        .blazored-typeahead__input:focus {
+            border-color: #0062cc !important;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5) !important;
+            transition: box-shadow .25s !important;
+        }
+        .blazored-typeahead__clear {
+            display: none !important;
+        }
+        .blazored-typeahead__input-mask {
+            padding: 0 !important;
+        }
+    </style>
+}
+else if (Place == "MainHeader")
+{
+    <div class="header-search col-5 p-0 d-flex align-items-center">
+        <div class="header-search-inner w-100 m-0">
+            <form class="search-form position-relative w-100 d-flex" action="">
+            	<div style="margin-right: 1px;">
+                    <Select DefaultValue=@("pin") @bind-Value="SearchCriteria">
+                        <SelectOption Value="pin">@("Client.PinNumber".Translate())</SelectOption>
+                        <SelectOption Value="tin">@("Client.Tin".Translate())</SelectOption>
+                        <SelectOption Value="name">@("Client.Name".Translate())</SelectOption>
+                        <SelectOption Value="companyname">@("Client.CompanyNameSearch".Translate())</SelectOption>
+                        <SelectOption Value="number">@("Client.ContactValue".Translate())</SelectOption>
+                        <SelectOption Value="document">@("Client.DocumentNumber".Translate())</SelectOption>
+                        <SelectOption Value="asset">@("Assets.AssetInfo".Translate())</SelectOption>
+                    </Select>
+                </div>
+                <div style="width: 100% !important;">
+                	<BlazoredTypeahead SearchMethod="SearchClient" Debounce="1400" AdditionalAttributes="additionalProperties" @bind-Value="SelectedClient">
+
+                    	<SelectedTemplate>
+                                 <div> Tin number @context.TinNumber</div>
+                       
+                        	<div>
+                                @SearchResultHelper.BuildCompanyInputValueResult(context)
+
+							</div>
+                        </SelectedTemplate>
+                        <ResultTemplate>
+                            <div @onclick="@(()=>OpenClientCard(context))">
+
+							@if (SearchResultHelper.HasCompanyInformation(context))
+									{
+                                    <p> @SearchResultHelper.BuildCompanyInfo(context)</p>
+                                    <br />
+                                    <br />
+                                    @foreach (var tag in context.Tags)
+                                        {
+                                        <div class="mdc-chip">
+                                            <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                                        </div>
+                                        }
+                                    }
+                                @if (SearchResultHelper.HasPersonalInformation(context))
+                                    {
+                                    <p> @SearchResultHelper.BuildPersonalInfo(context)</p>
+                                    <br />
+                                    <br />
+                                    @foreach (var tag in context.Tags)
+                                        {
+                                        <div class="mdc-chip">
+                                            <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                                        </div>
+                                        }
+                                    }
+                        	</div>
+                    	</ResultTemplate>
+                	</BlazoredTypeahead>
+				</div>
+                <div>
+                    <button class="btn btn-light search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <style>
+
+        .blazored-typeahead__input {
+            background: #fff !important;
+            border: none !important;
+            width: 100% !important;
+            padding: 0px 20px !important;
+			border-radius: 2px;
+            height: 100% !important;
+        }
+
+        .blazored-typeahead__input-mask {
+            background: transparent !important;
+            border: none !important;
+            width: 100% !important;
+            padding: 0px 20px !important;
+        }
+
+        .blazored-typeahead__input:focus {
+            border: none !important;
+            box-shadow: none !important;
+/*            width: 100% !important;*/
+/*            padding: 0px 20px !important;*/
+        }
+
+
+        .blazored-typeahead:focus-within {
+            box-shadow: none;
+        }
+
+        .blazored-typeahead {
+            all: unset;
+            background: transparent !important;
+            border: 0 0 0 0 !important;
+            border-radius: 0px;
+			height: 100%;
+        }
+
+        .blazored-typeahead__controls {
+            height: 100%;
+        }
+
+        .blazored-typeahead:focus {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .ant-select-selector {
+            border: none !important;
+        }
+
+        .btn.btn-light {
+            color: #545c6a;
+        }
+
+        .search-button {
+            margin-left: -5px;
+            height: 40px;
+        }
+    </style>
+}
+

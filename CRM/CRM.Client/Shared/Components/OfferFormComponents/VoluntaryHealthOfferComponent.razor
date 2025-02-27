@@ -1,0 +1,164 @@
+@inherits BaseComponent
+
+<EditForm EditContext="EditContext">
+    <ObjectGraphDataAnnotationsValidator />
+    <div class="row">
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => OfferModel.PolicyPeriodOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PolicyPeriodOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => OfferModel.CurrencyOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.CurrencyOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => OfferModel.PaymentTypeOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PaymentTypeOid)" />
+        </div>
+        @* <div class="col-3 form-group"> *@
+        @*     @if (ReadOnly) *@
+        @*     { *@
+        @*         <div class="readonly-input"> *@
+        @*             <span> *@
+        @*                 <span>@("OfferModel.EmailToNotify".Translate())</span> *@
+        @*                 <strong>@OfferModel.EmailToNotify</strong> *@
+        @*             </span> *@
+        @*         </div> *@
+        @*     } *@
+        @*     else *@
+        @*     { *@
+        @*         <MatTextField @bind-Value="OfferModel.EmailToNotify" Label="@("OfferModel.EmailToNotify".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField> *@
+        @*         <ValidationMessage For="@(() => OfferModel.EmailToNotify)" /> *@
+        @*     } *@
+        @* </div> *@
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.Commission".Translate())</span>
+                        <strong>@OfferModel.Commission</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.Commission" Label="@("OfferModel.Commission".Translate() + "*")" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.Commission)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.TypeOfActivity".Translate())</span>
+                        <strong>@OfferModel.TypeOfActivity</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.TypeOfActivity" Label="@("OfferModel.TypeOfActivity".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.TypeOfActivity)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.InsuranceArea".Translate())</span>
+                        <strong>@OfferModel.InsuranceArea</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.InsuranceArea" Label="@("OfferModel.InsuranceArea".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.InsuranceArea)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.IsJobContainsHarmfulFactors".Translate())</span>
+                        <strong>@OfferModel.IsJobContainsHarmfulFactors</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.IsJobContainsHarmfulFactors" Label="@("OfferModel.IsJobContainsHarmfulFactors".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.IsJobContainsHarmfulFactors)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.NumberOfOfficeWorkers".Translate())</span>
+                        <strong>@OfferModel.NumberOfOfficeWorkers</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.NumberOfOfficeWorkers" Label="@("OfferModel.NumberOfOfficeWorkers".Translate())" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.NumberOfOfficeWorkers)" />
+            }
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.NumberOfProductionWorkers".Translate())</span>
+                        <strong>@OfferModel.NumberOfProductionWorkers</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.NumberOfProductionWorkers" Label="@("OfferModel.NumberOfProductionWorkers".Translate())" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.NumberOfProductionWorkers)" />
+            }
+        </div>
+        <div class="col-12 form-group" style="max-height: 56px">
+            <MatCheckbox @bind-Value="OfferModel.IsRenew" Label="@("OfferModel.IsRenew".Translate())" Outlined="true" Disabled="ReadOnly"></MatCheckbox>
+        </div>
+        @if (OfferModel.IsRenew)
+        {
+            <div class="col-12 form-group">
+                @if (ReadOnly)
+                {
+                    <div class="readonly-input">
+                        <span>
+                            <span>@("PolicyNumber".Translate())</span>
+                            <strong>@OfferModel.ExistingPolicyNumber</strong>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <MatTextField @bind-Value="OfferModel.ExistingPolicyNumber" Label="@("PolicyNumber".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                    <ValidationMessage For="@(() => OfferModel.ExistingPolicyNumber)" />
+                }
+            </div>
+        }
+    </div>
+    <div class="age-range">
+        <CardComponent Header="@("OfferModel.AgeRange".Translate())" HeaderIconClass="">
+            <VoluntaryHealthOfferEmployeesAgeComponent VoluntaryHealthInsuranceOfferModel="@OfferModel" ReadOnly="ReadOnly"></VoluntaryHealthOfferEmployeesAgeComponent>
+        </CardComponent>
+    </div>
+    <br />
+</EditForm>
+
+
+<div style="display:none">
+    <CRM.Client.Shared.Components.PrintOut.Offers.VoluntaryHealthPrintOut DealModel="DealModel" OfferModel="OfferModel"></CRM.Client.Shared.Components.PrintOut.Offers.VoluntaryHealthPrintOut>
+</div>

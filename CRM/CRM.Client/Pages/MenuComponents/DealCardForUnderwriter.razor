@@ -1,0 +1,190 @@
+﻿@using Zircon.Core.Extensions
+@using CRM.Data.Enums
+@using CRM.Operation.Localization
+@inherits BaseComponent
+
+<SlidePanelCommonContent HeaderText="@(LocalizationExtension.Translate("Deal"))">
+    <Body>
+        <EditForm EditContext="EditContext">
+            <DataAnnotationsValidator /><ValidationSummary />
+            <ObjectGraphDataAnnotationsValidator />
+            <CardComponent Header="@(LocalizationExtension.Translate("Deal.GeneralInfo"))" HeaderIconClass="">
+                <DealGeneralInfoComponent DealModel="@Model"></DealGeneralInfoComponent>
+            </CardComponent>
+            <CardComponent Header="@(LocalizationExtension.Translate("Underwriter"))" HeaderIconClass="">
+                <select id="SelectUnderwriter" Placeholder="@(LocalizationExtension.Translate(" DealCardForUnderwriter.SelectUnderwriter"))" class="form-control" @onchange=UnderWriterSelected>
+                    @if (Underwriters.Any())
+                    {
+                        <option value="" selected disabled hidden>@(LocalizationExtension.Translate("DealCardForUnderwriter.SelectUnderwriter"))</option>
+                        @foreach (var underwriter in Underwriters)
+                        {
+                            <option Value="@(underwriter.Login)">@(underwriter.FullName)</option>
+                        }
+                    }
+                </select>
+            </CardComponent>
+            @if (Model.DealStatus.In(DealStatus.SurveySent, DealStatus.PendingUnderwriting))
+            {
+                if (Model.UnderwriterUser != null)
+                {
+                    <CardComponent Header="@(LocalizationExtension.Translate("Deal.Survey"))" HeaderIconClass="">
+                        @if (Model.SumInsured.HasValue && !string.IsNullOrEmpty(Model.SurveyContactInfo))
+                        {
+                            <div class="row">
+                                <div class="col-3 form-group">
+                                    <DropDownComponent Required="true" ItemExpression="@(() => Model.Survey.SurveyerType)" Parent="Model.Survey" OnSelected="StateHasChanged" ReadOnly="@(!Model.DealStatus.In(DealStatus.PendingUnderwriting, DealStatus.SurveySent))"></DropDownComponent>
+                                    <ValidationMessage For="@(() => Model.Survey.SurveyerType)" />
+                                </div>
+                                <div class="col-3 form-group">
+                                    <div class="readonly-input">
+                                        <span>
+                                            <span>@(LocalizationExtension.Translate("SurveyStatus"))</span>
+                                            <strong>@Model.Survey.StatusAsString</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-3 form-group">
+                                    <button class="btn btn-primary" @onclick="SubmitSurvey">
+                                        @if (SubmitSurveyButtonLoading)
+                                        {
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        }
+                                        @(LocalizationExtension.Translate("Button.SubmitQuery"))
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5>@(LocalizationExtension.Translate("DealCardForUnderwriter.SumInsuredOrClientPhoneNotSet"))</h5>
+                        }
+                    </CardComponent>
+                }
+                else
+                {
+                    <a onclick="document.getElementById('SelectUnderwriter').scrollIntoView({behavior:'smooth'})">@(LocalizationExtension.Translate("DealCardForUnderwriter.SelectUnderwriter"))</a>
+                }
+            }
+            @if (IsSurveyFilesSectionActive())
+            {
+                <div class="div">
+                    <CardComponent Header="@(LocalizationExtension.Translate("SurveyAttachment"))" HeaderIconClass="">
+                        <iframe src="@SurveyFilesIFrameUrl" width="100" frameborder="0"></iframe>
+                    </CardComponent>
+                </div>
+            }
+            <CardComponent Header="@(LocalizationExtension.Translate("OfferForm"))" HeaderIconClass="">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <TextArea @bind-Value="Model.DealSubject" cols="5" rows="20" Label="@(LocalizationExtension.Translate("DealModel.DealSubject"))" Outlined="true" ReadOnly="ReadOnly"></TextArea>
+                        <ValidationMessage For="@(() => Model.DealSubject)" />
+                    </div>
+                    <div class="col-sm-4 form-group readonly-dropdown">
+                        <DropDownComponent Required="true" ItemExpression="@(() => Model.SelectedOfferType)" ReadOnly="true" Parent="Model" OnSelected="StateHasChanged"></DropDownComponent>
+                    </div>
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("OfferModel.SumInsured"))</span>
+                                <strong>@Model.SumInsured</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @CreateOfferFormComponent()
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("CardComponent.InsuredPerson"))" HeaderIconClass="">
+                <ClientSearchComponent ClientFromParameter="@Model.Client" ReadOnly="true"></ClientSearchComponent>
+                <ValidationMessage For="@(() => Model.Client)" />
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("DealMode.ClientPhoneNumber"))</span>
+                                <strong>@Model.ClientPhoneNumber</strong>
+                            </span>
+                        </div>
+                        <ValidationMessage For="@(() => Model.ClientPhoneNumber)" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("DealMode.SurveyContactInfo"))</span>
+                                <strong>@Model.SurveyContactInfo</strong>
+                            </span>
+                        </div>
+                        <ValidationMessage For="@(() => Model.SurveyContactInfo)" />
+                    </div>
+                </div>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("LanguageSelection"))" HeaderIconClass="">
+                <div class="row">
+                    <div class="col-3 form-group readonly-dropdown">
+                        <DropDownComponent Required="true" ItemExpression="@(() => Model.OfferLanguageOid)" Parent="Model" OnSelected="StateHasChanged" ReadOnly="true"></DropDownComponent>
+                    </div>
+                </div>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("Attachment"))" HeaderIconClass="">
+                <iframe src="@FileUploadIFrameUrl" width="100%" frameborder="0"></iframe>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("DealDiscussion"))" HeaderIconClass="">
+                <DealDiscussionComponent DealDiscussionModel="@Model.DealDiscussionModel" ReadOnly="IsFormReadOnly()" SubmitDiscussionButtonLoading="@DiscussionSubmitLoading" DiscussionSendClickEvent="SubmitDiscussion"></DealDiscussionComponent>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("Deal.AdditionalNote"))" HeaderIconClass="">
+                <div class="row pt-3 form-btn">
+                    <textarea class="underwriter-disabled-textarea" placeholder="@(LocalizationExtension.Translate("Deal.GeneralNote"))" disabled>@Model.GeneralNote</textarea>
+                    <ValidationMessage For="@(() => Model.GeneralNote)" />
+                </div>
+            </CardComponent>
+            <CardComponent Header="@(LocalizationExtension.Translate("AddOffer"))" HeaderIconClass="">
+                <OfferComponent DealModel="@Model"></OfferComponent>
+                @if (Model.UnderwriterUser != null)
+                {
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            @if (IsSubmitOfferButtonActive())
+                            {
+                                <button type="submit" class="btn btn-primary" @onclick="SubmitOffers">
+                                    @if (SubmitButtonLoading)
+                                    {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    }
+                                    @(LocalizationExtension.Translate("Button.SubmitOffers"))
+                                </button>
+                            }
+
+                            @if (IsRejectButtonActive())
+                            {
+                                <button class="btn btn-primary" @onclick="RejectDeal">
+                                    @if (RejectButtonLoading)
+                                    {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    }
+                                    @(LocalizationExtension.Translate("Button.RejectDeal"))
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a onclick="document.getElementById('SelectUnderwriter').scrollIntoView({behavior:'smooth'})">@(LocalizationExtension.Translate("DealCardForUnderwriter.SelectUnderwriter"))</a>
+                }
+
+                @if (IsDealPolicyLinkActive())
+                {
+                    <CardComponent Header="@(LocalizationExtension.Translate("LinkDealToPolicy"))" HeaderIconClass="">
+                        <DealPolicyLinkComponent CallParentStateHasChanged="StateChanged" DealModel="@Model" />
+                    </CardComponent>
+                }
+            </CardComponent>
+        </EditForm>
+    </Body>
+</SlidePanelCommonContent>

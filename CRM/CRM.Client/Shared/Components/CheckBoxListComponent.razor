@@ -1,0 +1,96 @@
+﻿@inherits BaseComponent
+@typeparam TItem
+@using Zircon.Core.OperationModel
+@using System.Linq.Expressions
+@using System.Reflection
+@using CRM.Client.Models
+@using Newtonsoft.Json
+@using System.Collections.ObjectModel
+@using System.Collections.Specialized
+@using System.ComponentModel
+@using System.Runtime.CompilerServices
+@using CRM.Operation.Extensions
+
+@foreach (var item in CheckBoxItems)
+{
+    <div class=@(EachCheckboxInNewRow ? "\"row\"" : "")>
+        <MatCheckbox Label="@(item.Label)" @bind-Value="@item.Selected" Disabled="ReadOnly"></MatCheckbox>
+    </div>
+}
+
+@code
+{
+    [Parameter]
+    public IModel Parent { get; set; }
+
+    [Parameter]
+    public EventCallback<List<CheckBoxModel>> OnValueChanged { get; set; }
+    
+    [Parameter]
+    public Expression<Func<TItem>> ItemExpression { get; set; }
+
+    public ObservableCollection<CheckBoxModel> CheckBoxItems = new ObservableCollection<CheckBoxModel>();
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+    
+    [Parameter]
+    public bool EachCheckboxInNewRow { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadItems();
+        await base.OnInitializedAsync();
+    }
+
+    public async Task LoadItems()
+    {
+        var state = await State.Sourceloader(new SourceLoaderModel()
+        {
+            ParentPropertyNamespace = Parent.GetType().AssemblyQualifiedName,
+            PropertyName = GetPropertyName(ItemExpression),
+            ParentAsJson = JsonConvert.SerializeObject(Parent)
+        });
+
+        //Initializing Observable collection.
+        CheckBoxItems = new ObservableCollection<CheckBoxModel>();
+        
+        //Collection changed event handling.
+        CheckBoxItems.CollectionChanged += (sender, args) =>
+        {
+            foreach (CheckBoxModel newItem in CheckBoxItems)
+            {
+                newItem.PropertyChanged += ((o, eventArgs) => OnValueChanged.InvokeAsync(CheckBoxItems.ToList()));
+            }
+        };
+        
+        //Adding source loader item to collection.
+        state.Model.ForEach(x =>
+        {
+            CheckBoxItems.Add(new CheckBoxModel
+            {
+                Label = x.Value,
+                Selected = false,
+                Value = x.Key
+            });
+        });
+
+        //defining initial tip of checkbox list.
+        PropertyInfo propInfo = Parent.GetType().GetProperty(GetPropertyName(ItemExpression));
+        string valueOfProperty = propInfo.GetValue(Parent, null)?.ToString();
+
+        valueOfProperty?.Split(',').ForEach(x =>
+        {
+            var checkBoxItem = CheckBoxItems.SingleOrDefault(y => (string) y.Value == x);
+            if (checkBoxItem != null) checkBoxItem.Selected = true;
+        });
+
+        StateHasChanged();
+    }
+
+    private static string GetPropertyName<T>(Expression<Func<T>> propertyExpression)
+    {
+        return (propertyExpression.Body as MemberExpression)?.Member.Name;
+    }
+}
+

@@ -1,0 +1,28 @@
+﻿
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData">
+            <NotAuthorized>
+                <LayoutView Layout="@typeof(LoginLayout)">
+                    <CRM.Client.Pages.RedirectToLogin />
+                </LayoutView>
+            </NotAuthorized>
+            <Authorizing>
+                <LayoutView Layout="@typeof(LoginLayout)">
+                   
+                        <p>Sistemə daxil olursunuz...</p> @*@("YouAreAuthorizingNow".Translate()) I didnt used translate because till translate, this page switch*@
+                   
+                </LayoutView>
+            </Authorizing>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(LoginLayout)">
+                <p>Səhifə tapılmadı.</p>  @*@("ThereIsNothing".Translate())*@
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+
+</Router>
+

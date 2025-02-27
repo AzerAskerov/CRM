@@ -1,0 +1,13 @@
+﻿<SlidePanelCommonContent HeaderText="@("SlideSearch.Search".Translate())">
+    <Body>
+        <div> 
+            <div class="px-3 py-2">
+                <CommonSearch @bind-ReleatedClient="@(ClientINN)" Place="ContactCard"></CommonSearch>
+            </div>
+        </div>
+    </Body>
+</SlidePanelCommonContent>
+
+@code{
+    public int? ClientINN { get; set; } 
+}

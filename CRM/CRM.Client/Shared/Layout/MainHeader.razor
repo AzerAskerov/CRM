@@ -1,0 +1,69 @@
+﻿@inject IJSRuntime jsRuntime
+
+<!--Header Section-->
+<header>
+    <div id="header" class="d-flex justify-content-between">
+        <!-- header logo starts -->
+        <div class="d-flex align-items-center">
+            <NavLink class="logo" href="">
+                <span class="logo-text">CRM</span>
+                <span class="logo-color">Atəşgah</span>
+            </NavLink>
+        </div>
+        <!-- header logo ends -->
+
+        <!-- header search bar starts -->
+        <CommonSearch Place="MainHeader"></CommonSearch>
+        <!-- header search bar ends -->
+
+        <!-- time section starts -->
+        <div class="timeman-container py-2">
+            <div class="timeman-wrap">
+                <div class="timeman-block d-flex align-items-center justify-content-center">
+                    <div class="timer d-flex">
+                        <span id="time-hour" class="time-hours">00</span>
+                        <span class="time-seperate">:</span>
+                        <span id="time-minute" class="time-minutes">00</span>
+                        <span class="time-seperate">:</span>
+                        <span id="time-second" class="time-seconds">00</span>
+                    </div>
+                    <span style="opacity: 1;" class="timeman-background"></span>
+                </div>
+            </div>
+        </div>
+        <!-- time section ends -->
+
+        <!-- user profile section starts -->
+        <div class="position-relative">
+            <AuthorizeView>
+                <Authorized>
+                    <div class="header-user-block d-flex align-items-center pl-3 py-2 h-100">
+                        <div class="user-img mr-3">
+                            <img class="user-img-icon" src="image/user-image.png" alt="">
+                        </div>
+                        <p class="user-name h-100 d-flex align-items-center m-0">@context.User.Identity.Name.ToUpper()
+                            <i class="ml-2 fas fa-caret-down user-"></i>
+                        </p>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+            <MainHeaderUserNavMenu></MainHeaderUserNavMenu>
+        </div>
+        <!-- user profile section ends -->
+    </div>
+</header>
+<!--End Header Seaction-->
+
+@code{
+
+    string userName = "";
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // call your JS here
+            await jsRuntime.InvokeVoidAsync("clienttime.showTime");
+        }
+    }
+}

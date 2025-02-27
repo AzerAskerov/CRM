@@ -1,0 +1,77 @@
+﻿@inherits BaseComponent
+@attribute [Authorize]
+
+<SlidePanelCommonContent HeaderText="@("Company.View.ContractCard".Translate())">
+    <Body>
+
+        <div class="row col-lg-12">
+            <div class="popup-frame-body-container" style="width:1110px;">
+                <MatTabGroup>
+
+                    <MatTab Label="@("ContractCard.Company".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+                                <CompanyCardView></CompanyCardView>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                    <MatTab Label="@("ContractCard.Asset".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+                                <AssetCardView></AssetCardView>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                    <MatTab Label="@("ContractCard.Policies".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+                                <Policies></Policies>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                    <MatTab Label="@("ContractCard.Invoices".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+                                <Invoices></Invoices>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+
+                    <MatTab Label="@("ContractCard.Claims".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+                                <Claims></Claims>
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                    <MatTab Label="@("ContractCard.Medicine".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+
+                                <MedServices></MedServices>
+
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                    <MatTab Label="@("ContractCard.Deals".Translate())">
+                        <CascadingValue Value="@ClientContractModel" Name="ClientContractModel">
+                            <CascadingValue Value="@RoleModel" Name="RoleModel">
+
+                                <ClientDealsGrid></ClientDealsGrid>
+
+                            </CascadingValue>
+                        </CascadingValue>
+                    </MatTab>
+
+                </MatTabGroup>
+            </div>
+        </div>
+    </Body>
+</SlidePanelCommonContent>
+

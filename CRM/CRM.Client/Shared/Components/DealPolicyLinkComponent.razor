@@ -1,0 +1,31 @@
+﻿@using CRM.Data.Enums
+@using CRM.Operation.Models.Login
+@using CRM.Operation.SourceLoaders
+@using CRM.Operation.Models.DealOfferModels
+@inherits BaseComponent
+
+@if (IsNewDealPolicyLinkActive())
+{
+    <div class="row">
+        <div class="col-3 form-group">
+            <MatTextField @bind-Value="PolicyNumber" Label="@("DealPolicyLinkViewModel.PolicyNumber".Translate())" Outlined="true"></MatTextField>
+        </div>
+        <div class="col form-group">
+            <button @onclick="SearchAndLinkPolicy" class="btn btn-primary float-left mr-2">
+                @if (SearchAndLinkPolicyButtonLoading)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                }
+                @("Button.SearchAndLinkPolicy".Translate())
+            </button>
+        </div> 
+    </div>
+}
+@if (DealModel.DealPolicyLinks.Any())
+{
+    <Grid Items="@DealModel.DealPolicyLinks" class="table">
+        <GridColumn TRowData="DealPolicyLinkViewModel" Expression="c => c.PolicyNumber" Title="@("DealPolicyLinkViewModel.PolicyNumber".Translate())"></GridColumn>
+        <GridColumn TRowData="DealPolicyLinkViewModel" Expression="c => c.OfferNumber" Title="@("DealPolicyLinkViewModel.OfferNumber".Translate())"></GridColumn>
+        <GridColumn TRowData="DealPolicyLinkViewModel" Expression="c => c.ByUser.FullName" Title="@("DealPolicyLinkViewModel.ByUserLinked".Translate())"></GridColumn>
+    </Grid>
+}

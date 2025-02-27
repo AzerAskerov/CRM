@@ -1,0 +1,48 @@
+﻿@inherits BaseComponent
+@inject IComponentService Comp;
+
+<!--Right Menu Bar Section-->
+    <div class="right-bar d-flex align-items-center">
+        @*<div class="bar-help-box">
+            <div class="help-icon-box">
+                <i class="fas fa-question-circle help-icon"></i>
+            </div>
+        </div>*@
+        @*<div class="bar-notify-box" @onclick="@(() => Comp.Show<Notification>("Notification"))">
+            <div class="notify-icon-box">
+                <a class="add-new-contact-button">
+                    <i class="fas fa-bell notify-icon">
+                    </i>
+                </a>
+            </div>
+        </div>*@
+        <div class="w-100">
+            <div class="bar-search-box w-100 my-3" @onclick="@(() => Comp.Show<SlideSearch>("SlideSearch"))">
+                <div class="search-icon-box w-100 h-100 d-flex align-items-center justify-content-center">
+                    <a class="add-new-contact-button">
+                        <i class="fas fa-search search-icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="bar-notify-box w-100 my-3">
+                <div class="notify-icon-box w-100 h-100 d-flex align-items-center justify-content-center">
+                    <a class="add-new-contact-button">
+                        <i class="fas fa-bell notify-icon"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="bar-dial-box w-100 my-3">
+                <div class="dial-icon-box w-100 h-100 d-flex align-items-center justify-content-center">
+                    <a class="add-new-contact-button">
+                        <i class="fas fa-phone-alt dial-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @*<div class="bar-dial-box">
+            <div class="dial-icon-box">
+                <i class="fas fa-phone-alt dial-icon"></i>
+            </div>
+        </div>*@
+    </div>
+<!--End Right Menu Bar Section-->

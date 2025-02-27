@@ -1,0 +1,31 @@
+﻿@inherits BaseComponent
+@using CRM.Operation.Models.DealOfferModels
+@if (DealDiscussionModel.DiscussionHistory.Any())
+{
+    <div class="table-wrapper">
+        <Grid Items="@DealDiscussionModel.DiscussionHistory" class="table">
+            <GridColumn TRowData="DiscussionViewModel" Expression="c => c.Content" Title="@("Content.Title".Translate())"></GridColumn>
+            <GridColumn TRowData="DiscussionViewModel" Expression="c => c.SenderFullname" Title="@("Sender.FullName.Title".Translate())"></GridColumn>
+            <GridColumn TRowData="DiscussionViewModel" Expression="c => c.ReceiverFullname" Title="@("Receiver.FullName.Title".Translate())"></GridColumn>
+            <GridColumn TRowData="DiscussionViewModel" Expression="c => c.DateTime" Title="@("DateTime.Title".Translate())"></GridColumn>
+        </Grid>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12 form-group custom-textarea">
+        <TextArea placeholder="@("DealDiscussionModel.NewDiscussionContent".Translate())" AutoSize="true" @bind-Value="DealDiscussionModel.NewDiscussionContent" Disabled="@ReadOnly" AllowClear="true"></TextArea>
+    </div>
+    @if (!ReadOnly)
+    {
+        <div class="col-12 form-group">
+            <button @onclick="DiscussionSendClickEvent" class="btn btn-primary float-right">
+                @if (SubmitDiscussionButtonLoading)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                }
+                @("Button.Send".Translate())
+            </button>
+        </div>
+    }
+</div>

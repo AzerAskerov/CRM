@@ -1,0 +1,86 @@
+﻿@page "/contacts"
+@page "/contacts/{inn}"
+@inherits BaseComponent
+@using CRM.Operation.Models
+@attribute [Authorize]
+@inject IComponentService Comp;
+
+<CustomTitle Main="Contacts" ButtonText="@("Button.AddClient".Translate())"
+             ButtonClick="@(() => { ComponentParameters param = new ComponentParameters();
+                          param.Add(nameof(ContactCard.ClientContractModel), new ClientContract())
+                          ; Comp.Show<ContactCard>("Contact", param); })" SearchPlaceHolder="search">
+    <SearchBody>
+        <EditForm Model="@ContactSearchModel" OnValidSubmit="@(async ()=> await SearchContactAsync(ContactSearchModel))">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <input class="main-filter-search" type="text" placeholder="@("Search".Translate())">
+
+
+            <div class="main-ui-item-icon-block main-ui-show">
+                <span class="main-ui-item-icon main-ui-search"></span>
+                <span class="main-ui-item-icon main-ui-delete"></span>
+            </div>
+
+            <div class="search-popup-main col-lg-12 col-md-12 col-sm-12 row m-0 shadow-lg" id="search-popup-mainId">
+                <i class="fas fa-times close-popup-setting"></i>
+                <div class="col-3 popup-search-filter-main">
+                    <h6 class="text-uppercase text-center">@("Search.SearchCriteria".Translate())</h6>
+                </div>
+                <div class="col-12 popup-search-inputs-main">
+                    <div class="row py-3">
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("FullName".Translate())</span>
+                            <InputText @bind-Value="ContactSearchModel.FullName" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("PinNumber".Translate())</span>
+                            <InputText @bind-Value="ContactSearchModel.PinNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("DocumentNumber".Translate())</span>
+                            <InputText @bind-Value="ContactSearchModel.DocumentNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("PhoneNumber".Translate())</span>
+                            <InputText @bind-Value="ContactSearchModel.PhoneNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("RegNumber".Translate())</span>
+                            <InputText @bind-Value="ContactSearchModel.RegNumber" class="form-control"></InputText>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="save-company">
+                        <button class="save-company-setting-button" type="submit">@("Search".Translate())</button>
+
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </SearchBody>
+</CustomTitle>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="content-contact-page">
+            <Indicator Context="clients">
+                <Grid Items="@clients" class="table">
+                    <GridColumnCommand Actions="actions"></GridColumnCommand>
+                    <GridColumn TRowData="ContactListItemModel" Expression="c=>c.FullName"></GridColumn>
+                    <GridColumn TRowData="ContactListItemModel" Expression="c=>c.GenderType"></GridColumn>
+                    <GridColumn TRowData="ContactListItemModel" Expression="c=>c.PinNumber"></GridColumn>
+                    <GridColumn TRowData="ContactListItemModel" Expression="c=>c.BirthDate" Format="dd-MM-yyyy"></GridColumn>
+                    <GridColumn TRowData="ContactListItemModel" Expression="c=>c.PositionName"></GridColumn>
+                </Grid>
+            </Indicator>
+            <div class="row">
+                <div class="col">
+                    <CustomPagination MetaData="MetaData" Spread="10" SelectedPage="@SelectedPage" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,117 @@
+﻿@page "/deals"
+@page "/opendeal/{DealNumber}"
+@page "/deals/{DealGuid}"
+@inherits BaseComponent
+@using CRM.Operation.Models
+@attribute [Authorize]
+@inject IComponentService _componentService;
+
+<CustomTitle Main="Deals" SearchPlaceHolder="search">
+    <SearchBody>
+        <EditForm Model="@DealSearchModel" OnValidSubmit="@(()=>SearchAsync(DealSearchModel, MetaData))">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <input class="main-filter-search" type="text" placeholder="@("Search".Translate())">
+
+
+            <div class="main-ui-item-icon-block main-ui-show">
+                <span class="main-ui-item-icon main-ui-search"></span>
+                <span class="main-ui-item-icon main-ui-delete"></span>
+            </div>
+
+            <div class="search-popup-main col-lg-12 col-md-12 col-sm-12 row m-0 shadow-lg" id="search-popup-mainId">
+                <i class="fas fa-times close-popup-setting"></i>
+                <div class="col-3 popup-search-filter-main">
+                    <h6 class="text-uppercase text-center">@("Search.SearchCriteria".Translate())</h6>
+                </div>
+                <div class="col-12 popup-search-inputs-main">
+                    <div class="row py-3">
+
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("DealNumber".Translate())</span>
+                            <InputText @bind-Value="DealSearchModel.DealNumber" class="form-control"></InputText>
+                        </div>
+                        @*<div class="col-4 py-1">
+            <span class="label-input-setting">@("PinNumber".Translate())</span>
+            <InputText @bind-Value="DealSearchModel.PinNumber" class="form-control"></InputText>
+        </div>*@
+                        @*<div class="col-4 py-1">
+            <span class="label-input-setting">@("Client.Tin".Translate())</span>
+            <InputText @bind-Value="DealSearchModel.DocumentNumber" class="form-control"></InputText>
+        </div>*@
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("CreatedByUser.FullName".Translate())</span>
+                            <InputText @bind-Value="DealSearchModel.MediatorUserName" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("UnderwriterUser.FullName".Translate())</span>
+                            <InputText @bind-Value="DealSearchModel.UnderwriterUserName" class="form-control"></InputText>
+                        </div>
+
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("DealSearch.DealSubject".Translate())</span>
+                            <InputText @bind-Value="DealSearchModel.DealSubject" class="form-control"></InputText>
+                        </div>
+
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("DealSearch.DiscussionText".Translate())</span>
+                            <InputText @bind-Value="DealSearchModel.DiscussionText" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1 d-flex align-items-end">
+                            <InputSelect class="form-control" @bind-Value="DealSearchModel.DealStatus">
+                                @foreach (var item in Enum.GetValues(typeof(CRM.Data.Enums.DealStatus)))
+                                {
+                                    <option value="@item">@item.ToString().Translate()</option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <div>
+                            <div class="px-3 py-2">
+                                <CommonSearch @bind-ReleatedClient="@(DealSearchModel.ClientInn)" Place="ContactCard"></CommonSearch>
+                            </div>
+                        </div>
+                        <div class="col-4 py-2 d-flex align-items-end">
+                            <InputSelect class="form-control" @bind-Value="DealSearchModel.DealType">
+                                @foreach (var item in Enum.GetValues(typeof(CRM.Data.Enums.OfferTypeEnum)))
+                                {
+                                    <option value="@item">@item.ToString().Translate()</option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="save-company">
+                        <button class="save-company-setting-button" type="submit">@("Search".Translate())</button>
+
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </SearchBody>
+</CustomTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="content-contact-page">
+            <Indicator Context="deals">
+                <Grid Items="@deals" class="table" RowClass='(item, i) => item.HasUnreadMessage ? "table-success" : ""'>
+                    <GridColumnCommand Actions="actions"></GridColumnCommand>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.DealNumber"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.DealSubject"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.CreatedTimeStamp"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.DealStatusAsString"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.ClientFullname"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.CreatedByUserFullName"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.UnderwriterUserFullName"></GridColumn>
+                    <GridColumn TRowData="DealListItem" Expression="c=>c.DealTemplateName"></GridColumn>
+
+                </Grid>
+            </Indicator>
+            <div class="row">
+                <div class="col">
+                    <CustomPagination MetaData="MetaData" Spread="200" SelectedPage="@SelectedPage" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

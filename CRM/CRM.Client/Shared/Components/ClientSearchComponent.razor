@@ -1,0 +1,164 @@
+﻿@using CRM.Client.Helpers
+@inherits BaseComponent
+
+<style>
+    .blazored-typeahead {
+        all: unset;
+        background: transparent !important;
+        border: none !important;
+    }
+
+        .blazored-typeahead:focus {
+            background: transparent !important;
+            border: none !important;
+        }
+
+    .blazored-typeahead__input {
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        height: 40px !important;
+        color: #495057 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: .25rem !important;
+    }
+
+        .blazored-typeahead__input:focus {
+            border-color: #0062cc !important;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5) !important;
+            transition: box-shadow .25s !important;
+        }
+
+    .blazored-typeahead__clear {
+        display: none !important;
+    }
+
+    .blazored-typeahead__input-mask {
+        padding: 0 !important;
+    }
+
+</style>
+
+
+<div class="row align-items-end flex-nowrap">
+    <div class="col-3">
+        <label for="cars" >*</label>
+        <select disabled="@ReadOnly" class="form-control" @bind="SearchCriteria">
+            <option value="pin">@("Client.PinNumber".Translate())</option>
+            <option value="tin">@("Client.Tin".Translate())</option>
+            <option value="name">@("Client.Name".Translate())</option>
+            <option value="companyname">@("Client.CompanyNameSearch".Translate())</option>
+            <option value="number">@("Client.ContactValue".Translate())</option>
+            <option value="document">@("Client.DocumentNumber".Translate())</option>
+        </select>
+    </div>
+
+    <div class="col-9">
+        <BlazoredTypeahead Disabled="ReadOnly" SearchMethod="SearchClient" Debounce="1400" AdditionalAttributes="additionalProperties"
+                           @bind-Value="SelectedClient">
+            <SelectedTemplate>
+                <input disabled="@ReadOnly" class="form-control is-valid"
+                       value=@SearchResultHelper.BuildCompanyInputValueResult(context) />
+            </SelectedTemplate>
+            <ResultTemplate>
+
+                @if (SearchResultHelper.HasCompanyInformation(context))
+                {
+                    <p> @SearchResultHelper.BuildCompanyInfo(context)</p>
+                    <br />
+                    <br />
+                    @foreach (var tag in context.Tags)
+                    {
+                        <div class="mdc-chip">
+                            <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                        </div>
+                    }
+                }
+                @if (SearchResultHelper.HasPersonalInformation(context))
+                {
+                    <p> @SearchResultHelper.BuildPersonalInfo(context)</p>
+                    <br />
+                    <br />
+                    @foreach (var tag in context.Tags)
+                    {
+                        <div class="mdc-chip">
+                            <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@tag.Name></MatChip>
+                        </div>
+                    }
+                }
+                <br>
+                <br>
+
+            </ResultTemplate>
+        </BlazoredTypeahead>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<ClientContract> ClientSelected { get; set; }
+
+    public int? RelatedClient { get; set; }
+    public string Place { get; set; }
+
+    private ClientContract _selectedClient;
+    public string SearchCriteria { get; set; }
+    public Dictionary<string, object> additionalProperties = new Dictionary<string, object>();
+
+    public ClientContract SelectedClient
+    {
+        get { return _selectedClient; }
+        set
+        {
+            _selectedClient = value;
+            if (value != null)
+            {
+                RelatedClient = value.INN;
+                ClientSelected.InvokeAsync(value);
+                this.StateHasChanged();
+            }
+        }
+    }
+
+    [Parameter]
+    public ClientContract ClientFromParameter { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (ClientFromParameter != null)
+            _selectedClient = ClientFromParameter;
+
+        SearchCriteria = "pin";
+        additionalProperties.Add("style", Place == "ContactCard" ? "height:54px" : "height:32px");
+        return base.OnInitializedAsync();
+    }
+
+    public async Task<IEnumerable<ClientContract>> SearchClient(string searchText)
+    {
+        List<ClientContract> clients = new List<ClientContract>();
+
+        string query = SearchCriteria switch
+        {
+            "name" => QueryBuildingHelper.BuildNameSearchQuery(searchText),
+            "companyname" => QueryBuildingHelper.BuildCompanyNameSearchQuery(searchText),
+            "pin" => QueryBuildingHelper.BuildPinSearchQuery(searchText),
+            "tin" => QueryBuildingHelper.BuildTinSearchQuery(searchText),
+            "number" => QueryBuildingHelper.BuildNumberSearchQuery(searchText),
+            "document" => QueryBuildingHelper.BuildDocumentSearchQuery(searchText),
+            "asset" => QueryBuildingHelper.BuildAssetSearchQuery(searchText),
+            _ => ""
+        };
+
+        clients = await State.GetClientInfo<List<ClientContract>>(query);
+
+
+
+        return await Task.FromResult(clients);
+    }
+
+
+}

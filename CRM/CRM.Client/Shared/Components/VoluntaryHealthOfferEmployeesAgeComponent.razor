@@ -1,0 +1,47 @@
+@using CRM.Data.Enums
+@inherits BaseComponent
+@foreach (var employeeGroup in VoluntaryHealthInsuranceOfferModel.VoluntaryHealthInsuranceEmployeeGroups)
+{
+    <div class="row">
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => employeeGroup.AgeRangeOid)" Parent="@employeeGroup" OnSelected="StateHasChanged" ReadOnly="ReadOnly"/>
+            <ValidationMessage For="@(() => employeeGroup.AgeRangeOid)"/>
+        </div>
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.Count".Translate())</span>
+                        <strong>@employeeGroup.Count</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="employeeGroup.Count" Label="@("OfferModel.Count".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                <ValidationMessage For="@(() => employeeGroup.Count)" />
+            }
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => employeeGroup.Gender)" Parent="@employeeGroup" OnSelected="StateHasChanged" ReadOnly="ReadOnly"/>
+            <ValidationMessage For="@(() => employeeGroup.Gender)"/>
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent ItemExpression="@(() => employeeGroup.EmployeeType)" Parent="@employeeGroup" OnSelected="StateHasChanged" ReadOnly="ReadOnly"/>
+            <ValidationMessage For="@(() => employeeGroup.EmployeeType)"/>
+        </div>
+        @if (!ReadOnly)
+        {
+            <div class="col mb-3">
+                <a href="" class="btn btn-outline-danger" @onclick="@(() => RemoveOfferItem(employeeGroup))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+            </div>
+        }
+    </div>
+}
+@if (!ReadOnly)
+{
+    <div class="col pl-0">
+        <a href="" class="btn btn-outline-primary" @onclick="@AddEmployeeGroupItem" @onclick:preventDefault>@("Deals.Add".Translate())</a>
+    </div>
+}

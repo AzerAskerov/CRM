@@ -1,0 +1,43 @@
+﻿<div class="row w-100">
+    <div class="col-sm-12">
+        <div class="card @CardClass">
+            <div class="card-header @CardHeaderClass" style="background-color:#d7d9db">
+                @*<CopyToClipboard TextToBeCopied="@Link" />*@
+                <i class='@HeaderIconClass'></i> @Header
+            </div>
+            <div class="card-body @CardBodyClass">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    /// <summary>
+    /// CardView Header
+    /// </summary>
+    [Parameter]
+    public string Header { get; set; }
+
+    /// <summary>
+    /// CardView Header Icon
+    /// </summary>
+    [Parameter]
+    public string HeaderIconClass { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string CardBodyClass { get; set; }
+
+    [Parameter]
+    public string CardHeaderClass { get; set; }
+
+    [Parameter]
+    public string CardClass { get; set; }
+
+    [Parameter]
+    public string Link { get; set; }
+}

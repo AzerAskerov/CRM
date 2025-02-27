@@ -1,0 +1,79 @@
+﻿
+@*<div class="header">
+
+        <div class="container">
+
+            <h3>
+                @if (!String.IsNullOrEmpty(Icon))
+                {
+    <Icon Identifier="@Icon" />            }
+
+                <span class="text">@Main</span>
+
+                @if (!String.IsNullOrEmpty(ButtonText) || ButtonClick != null)
+                {
+    <button type="button" class="btn btn-primary" @onclick="@(() => ButtonClick?.Invoke())">
+        @if (!String.IsNullOrEmpty(ButtonIcon))
+        {
+    <Icon Identifier="@ButtonIcon" />}
+
+        @ButtonText
+    </button>            }
+            </h3>
+           
+
+        </div>
+    </div>
+    <div class="header-append"></div>*@
+
+
+
+<div class="container-fluid mt-1">
+    <div class="row">
+        <div class="component-header">
+            <div class="page-title-wrap">
+                <div class="page-title-inner">
+                    <!--Main Page Header-->
+                    <div class="page-title-menu">
+                        <span class="pagetitle-menu-text">@Main.Translate()</span>
+                    </div>
+                    <!--End Main Page Header-->
+
+
+                    @if (!string.IsNullOrEmpty(SearchPlaceHolder) || SearchClick != null)
+                    {
+                        <!--Main Page Search-->
+                                <div class="page-search">
+                                    @SearchBody
+                                </div> 
+                        <!--End Main Page Search-->
+                    }
+
+
+                    @if (!string.IsNullOrEmpty(ButtonText) || ButtonClick != null)
+                    {
+
+
+                     <!--Main Page Toolbar-->
+                        <div class="toolbar-add-list">
+                            @*<button class="toolbar-option-list"><i class="fas fa-cog"></i></button>*@
+                            <a class="add-new-contact-button"   @onclick="@(() => ButtonClick?.Invoke())">
+                                @if (!string.IsNullOrEmpty(ButtonIcon))
+                                {
+                                    <CustomIcon Identifier="@ButtonIcon" />
+                                }
+                                @ButtonText
+                            </a>
+                        </div> 
+                      <!--End Main Page Toolbar-->
+                        }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter] public RenderFragment SearchBody { get; set; }
+}

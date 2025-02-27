@@ -1,0 +1,338 @@
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+.limiter * {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+div.input-group {
+	height: 50px !important;
+}
+
+div.input-group .form-control {
+	height: 100% !important;
+}
+
+/*---------------------------------------------*/
+.limiter a {
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666666;
+	margin: 0px;
+	transition: all 0.4s;
+}
+
+.limiter a:focus {
+	outline: none !important;
+}
+
+.limiter a:hover {
+	text-decoration: none;
+	color: #6675df;
+}
+
+/*---------------------------------------------*/
+.limiter h1, h2, h3, h4, h5, h6 {
+	margin: 0px;
+}
+
+.limiter p {
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666666;
+	margin: 0px;
+}
+
+.limiter ul, li {
+	margin: 0px;
+	list-style-type: none;
+}
+
+
+/*---------------------------------------------*/
+.limiter input {
+	/*outline: none;
+	border: none;*/
+}
+
+.limiter [placeholder] {
+	padding-left: 10px;
+}
+
+.limiter textarea {
+	outline: none;
+	border: none;
+}
+
+.limiter textarea:focus, input:focus {
+/*	border-color: transparent !important;*/
+}
+
+
+.limiter label {
+	/*display: block;
+	margin: 0;*/
+}
+
+/*---------------------------------------------*/
+.limiter button {
+	/*outline: none !important;
+	border: none;
+	background: transparent;*/
+}
+
+.limiter button:hover {
+	cursor: pointer;
+}
+
+.limiter iframe {
+	border: none !important;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ login ]*/
+.limiter {
+	width: 100%;
+	height: 100vh;
+}
+
+.container-login100 {
+	width: 100%;
+	height: 100%;
+}
+
+.wrap-login100 {
+	width: 35%;
+	height: 100%;
+}
+
+/*==================================================================
+[ Form ]*/
+
+.login100-form {
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 25px 25px;
+	border-radius: 10px;
+	box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, .5);
+}
+
+.login100-form-title {
+	width: 100%;
+	display: block;
+	font-size: 30px;
+	color: #333333;
+	line-height: 1.2;
+	text-align: center;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	padding: 15px;
+	border-radius: 10px;
+}
+
+/*------------------------------------------------------------------
+[ Input ]*/
+
+.wrap-input100 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: 100%;
+  height: 80px;
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.label-input100 {
+  font-size: 18px;
+  color: #999999;
+  line-height: 1.2;
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+  padding-left: 24px;
+  left: 0;
+  top: 30px;
+  transition: all 0.4s;
+}
+
+.input100 {
+  display: block;
+  width: 100%;
+  background: transparent;
+  font-size: 18px;
+  color: #555555;
+  line-height: 1.2;
+  padding: 0 26px;
+}
+
+input.input100 {
+  height: 100%;
+  transition: all 0.4s;
+}
+
+input[type=submit], input[type=submit]:focus {
+	border: none !important;
+	outline: none !important;
+}
+/*---------------------------------------------*/
+.focus-input100 {
+	position: absolute;
+	display: block;
+	width: calc(100% + 2px);
+	height: calc(100% + 2px);
+	top: -1px;
+	left: -1px;
+	pointer-events: none;
+	border: 1px solid #f89c31;
+	border-radius: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.4s;
+	transform: scaleX(1.1) scaleY(1.3);
+}
+
+.input100:focus + .focus-input100 {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.eff-focus-selection {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.input100:focus + .focus-input100 + .label-input100 {
+  top: 14px;
+  font-size: 13px;
+}
+
+.has-val {
+  height: 48px !important;
+}
+
+.has-val + .focus-input100 + .label-input100 {
+  top: 14px;
+  font-size: 13px;
+}
+
+
+
+
+/*------------------------------------------------------------------
+[ Button ]*/
+.container-login100-form-btn {
+	height: 45px;
+}
+
+.login100-form-btn {
+	height: 100%;
+	border-radius: 5px;
+	color: #fff;
+	letter-spacing: .2rem;
+	background: var(--main-color);
+	background: var(--main-linear-gr);
+	font-size: 17px;
+	font-weight: 600;
+}
+
+
+/*------------------------------------------------------------------
+[ Responsive ]*/
+
+@media (max-width: 992px) {
+	.wrap-login100 {
+		width: 70%;
+	}
+}
+
+@media (max-width: 768px) {
+	
+}
+
+@media (max-width: 576px) {
+	.wrap-login100 {
+		width: 90%;
+	}
+}
+
+/*------------------------------------------------------------------
+[ Alert validate ]*/
+
+.validate-input {
+  position: relative;
+}
+
+.alert-validate::before {
+  content: attr(data-validate);
+  position: absolute;
+  z-index: 100;
+  max-width: 70%;
+  background-color: #fff;
+  border: 1px solid #c80000;
+  border-radius: 2px;
+  padding: 4px 25px 4px 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 12px;
+  pointer-events: none;
+  color: #c80000;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.alert-validate::after {
+  content: "\f12a";
+  font-family: FontAwesome;
+  display: block;
+  position: absolute;
+  z-index: 110;
+  color: #c80000;
+  font-size: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 18px;
+}
+
+.alert-validate:hover:before {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (max-width: 992px) {
+  .alert-validate::before {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.toggle-password {
+	right: 0;
+	font-size: 18px;
+	background: transparent;
+	border: none;
+	z-index: 100;
+}
+
+.toggle-password:focus {
+	border: none !important;
+	outline: none !important;
+}
+
+#password {
+	padding-right: 55px;
+	border-radius: 0 .25rem .25rem 0;
+}

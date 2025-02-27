@@ -1,0 +1,86 @@
+﻿@inherits BaseComponent
+
+<EditForm EditContext="EditContext">
+    <ObjectGraphDataAnnotationsValidator />
+    <div class="row">
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.PolicyPeriodOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PolicyPeriodOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.CurrencyOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.CurrencyOid)" />
+        </div>
+        <div class="col-3 form-group @(ReadOnly ? "readonly-dropdown" : "")">
+            <DropDownComponent Required="true" ItemExpression="@(() => OfferModel.PaymentTypeOid)" Parent="OfferModel" OnSelected="StateHasChanged" ReadOnly="ReadOnly"></DropDownComponent>
+            <ValidationMessage For="@(() => OfferModel.PaymentTypeOid)" />
+        </div>
+        @* <div class="col-3 form-group"> *@
+        @*     @if (ReadOnly) *@
+        @*     { *@
+        @*         <div class="readonly-input"> *@
+        @*             <span> *@
+        @*                 <span>@("OfferModel.EmailToNotify".Translate())</span> *@
+        @*                 <strong>@OfferModel.EmailToNotify</strong> *@
+        @*             </span> *@
+        @*         </div> *@
+        @*     } *@
+        @*     else *@
+        @*     { *@
+        @*         <MatTextField @bind-Value="OfferModel.EmailToNotify" Label="@("OfferModel.EmailToNotify".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField> *@
+        @*         <ValidationMessage For="@(() => OfferModel.EmailToNotify)" /> *@
+        @*     } *@
+        @* </div> *@
+        <div class="col-3 form-group">
+            @if (ReadOnly)
+            {
+                <div class="readonly-input">
+                    <span>
+                        <span>@("OfferModel.Commission".Translate())</span>
+                        <strong>@OfferModel.Commission</strong>
+                    </span>
+                </div>
+            }
+            else
+            {
+                <MatTextField @bind-Value="OfferModel.Commission" Label="@("OfferModel.Commission".Translate())" Outlined="true" ReadOnly="ReadOnly" ValidationDisabled="true"></MatTextField>
+                <ValidationMessage For="@(() => OfferModel.Commission)" />
+            }
+        </div>
+        <div class="col-12 form-group" style="max-height: 56px">
+            <MatCheckbox @bind-Value="OfferModel.IsRenew" Label="@("OfferModel.IsRenew".Translate())" Outlined="true" Disabled="ReadOnly"></MatCheckbox>
+        </div>
+        @if (OfferModel.IsRenew)
+        {
+            <div class="col-12 form-group">
+                @if (ReadOnly)
+                {
+                    <div class="readonly-input">
+                        <span>
+                            <span>@("PolicyNumber".Translate())</span>
+                            <strong>@OfferModel.ExistingPolicyNumber</strong>
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <MatTextField @bind-Value="OfferModel.ExistingPolicyNumber" Label="@("PolicyNumber".Translate())" Outlined="true" ReadOnly="ReadOnly"></MatTextField>
+                    <ValidationMessage For="@(() => OfferModel.ExistingPolicyNumber)" />
+                }
+            </div>
+        }
+    </div>
+    <br />
+</EditForm>
+
+
+
+
+
+
+<div style="display:none">
+    <CRM.Client.Shared.Components.PrintOut.Offers.LifePrintOut DealModel="DealModel" OfferModel="OfferModel"></CRM.Client.Shared.Components.PrintOut.Offers.LifePrintOut>
+</div>
+
+
+

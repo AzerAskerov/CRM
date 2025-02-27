@@ -1,0 +1,34 @@
+﻿@inherits BaseComponent
+@inject IJSRuntime JsRuntime
+<br />
+<div class="container-fluid" style="width:1110px;">
+
+    <div class="row">
+        <div class="col-sm-4">
+            <h6>@("Invoices.razor.Count".Translate()) <span class="badge badge-secondary">@Count</span></h6>
+        </div>
+
+        <div class="col-sm-4">
+            <h6>@("Invoices.razor.NotPaid".Translate()) <span class="badge badge-secondary">@(NotPaid>0?NotPaid:0)</span></h6>
+        </div>
+
+        <div class="col-sm-4">
+            <h6>@("Invoices.razor.Paid".Translate()) <span class="badge badge-secondary">@Paid</span></h6>
+        </div>
+
+    </div>
+    <br />
+
+    @if (RoleModel.IsOwnClient || RoleModel.Full)
+    {
+        <Indicator Context="invoices">
+            <Grid Items="@invoices" class="table" id="datatableId">
+                <GridColumn TRowData="InvoiceModel" Expression="c => c.InvoiceNumber"></GridColumn>
+                <GridColumn TRowData="InvoiceModel" Expression="c => c.PolicyNumber"></GridColumn>
+                <GridColumn TRowData="InvoiceModel" Expression="c => c.StatusText"></GridColumn>
+                <GridColumn TRowData="InvoiceModel" Expression="c => c.AmountTotal"></GridColumn>
+                <GridColumn TRowData="InvoiceModel" Expression="c => c.AmountPaid"></GridColumn>
+            </Grid>
+        </Indicator>
+    }
+</div>

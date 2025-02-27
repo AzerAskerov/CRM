@@ -1,0 +1,38 @@
+﻿@inherits BaseComponent
+
+<br />
+
+<div class="container-fluid" style="width:1110px;">
+
+
+    @foreach (var p in InforceProductList)
+    {
+        <span class="badge badge-success">@p.PolicyType</span>
+    }
+
+    @foreach (var f in InOtherStatusProductList)
+    {
+        <span class="badge badge-warning">@f.PolicyType</span>
+    }
+
+    <br />
+    <br />
+    @if (RoleModel.IsOwnClient || RoleModel.Full)
+    {
+        <Indicator Context="policies">
+            <Grid Items="@policies" class="table">
+                <GridColumn TRowData="ParticipatedInsuredPersonPoliciesViewModel" Expression="c => c.PolicyNumber"></GridColumn>
+                <GridColumn TRowData="ParticipatedInsuredPersonPoliciesViewModel" Expression="c => c.PolicyType"></GridColumn>
+                <GridColumn TRowData="ParticipatedInsuredPersonPoliciesViewModel" Expression="c => c.Status"></GridColumn>
+                <GridColumn TRowData="ParticipatedInsuredPersonPoliciesViewModel" Expression="c => c.StartDate"></GridColumn>
+                <GridColumn TRowData="ParticipatedInsuredPersonPoliciesViewModel" Expression="c => c.EndDate"></GridColumn>
+
+            </Grid>
+        </Indicator>
+        <div class="row">
+            <div class="col">
+                <CustomPagination MetaData="MetaData" Spread="3" SelectedPage="@SelectedPage" />
+            </div>
+        </div>
+    }
+</div>

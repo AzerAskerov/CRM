@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background-image: url('image/canyon.jpg');">
+    <!--Header Section-->
+    <header>
+
+        <div id="header" class=" col-lg-12 col-md-12 col-sm-12">
+
+            <!--Header Logo-->
+            <div class="header-logo col-lg-2 col-md-2 col-sm-2">
+
+                <a class="logo" href="#">
+                    <span class="logo-text">CRM</span>
+                    <span class="logo-color">24/7</span>
+                </a>
+            </div>
+            <!--End Header Logo-->
+
+            <!--Header Search Input-->
+            <div class="header-search col-lg-4 col-md-4 col-sm-4">
+                <div class="header-search-inner">
+                    <form class="search-form" action="">
+                        <input class="search-input" type="text" placeholder="Search">
+
+                        <i class="fas fa-search search-button"></i>
+                    </form>
+                </div>
+            </div>
+            <!--End Header Search Input-->
+
+            <!--Header Search Filter-->
+            <div class="header-logo-settings">
+                <i class="fas fa-sliders-h setting-icon-header"></i>
+                <div class="setting-company-popup">
+                    <span class="label-input-setting">Company name</span>
+                    <select class="dropdown-setting-company">
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                    </select>
+
+                    <span class="label-input-setting">Address</span>
+                    <select class="dropdown-setting-company">
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                        <option value="Test">Test</option>
+                    </select>
+
+                    <hr>
+
+                    <div class="save-company">
+                        <button class="save-company-setting-button">search</button>
+
+                    </div>
+
+                    <i class="fas fa-times close-popup-setting"></i>
+                    <div class="setting-popup-angle"></div>
+                </div>
+
+            </div>
+            <!--End Header Search Filter-->
+
+            <!--TimeSpan Section-->
+            <div class="timeman-container col-lg-2 col-md-2 col-sm-2">
+                <div class="timeman-wrap">
+                    <span class="timeman-block">
+                        <span class="timer">
+                            <span class="time-hours">00</span>
+                            <span class="time-seperate">:</span>
+                            <span class="time-minutes">00</span>
+                            <span class="time-am-pm">AM</span>
+                        </span>
+                        <span style="opacity: 1;" class="timeman-background"></span>
+                    </span>
+                </div>
+            </div>
+            <!--End TimeSpan Section-->
+
+
+            <!--User Profile Section-->
+            <div class="header-user-block">
+                <div class="user-img">
+                    <img class="user-img-icon" src="image/user-image.png" alt="">
+                </div>
+
+                <span class="user-name">Mammad Mammadov <i class="fas fa-caret-down user-"></i> </span>
+
+
+            </div>
+            <div id="user-show-popup" style="display:none;">
+                <div class="menu-popup-items">
+                    <a class="menu-popup-item" href="#">My Profile</a>
+                    <a class="menu-popup-item" href="#">Themes</a>
+                    <a class="menu-popup-item" href="#">My CRM network page</a>
+                    <a class="menu-popup-item" href="#">Configure notifications</a>
+                    <a class="menu-popup-item" href="#">Upgrade your plan</a>
+                    <a class="menu-popup-item" href="#">Log out</a>
+                </div>
+                <div class="popup-angle-up">
+
+                </div>
+            </div>
+            <!--End User Profile Section-->
+
+        </div>
+
+    </header>
+    <!--End Header Seaction-->
+<!--Menu Section-->
+<div id="menu-not-open-mode" class="menu-collapsed-mode opened">
+
+    <div class="menu-items-block">
+
+        <div class="menu-items-header">
+            <i class="fas fa-bars menu-items-header-icon"></i>
+            <span class="menu-header-item-link-text">Expand menu</span>
+        </div>
+
+        <div class="menu-items-body">
+
+            <ul class="menu-items">
+                <li class="menu-item-li">
+                    <a class="menu-item-link " href="#">
+                        <span class="menu-item-icon"><i class="fas fa-file-alt"></i></span>
+                        <span class="menu-item-link-text">Activity Stream</span>
+                    </a>
+
+                </li>
+                <li class="menu-item-li  menu-item-li-active">
+                    <a class="menu-item-link" href="#">
+                        <span class="menu-item-icon"><i class="fas fa-clipboard-check"></i></span>
+                        <span class="menu-item-link-text">Tasks</span>
+                    </a>
+
+                </li>
+                <li class="menu-item-li">
+                    <a class="menu-item-link" href="#">
+                        <span class="menu-item-icon"><i class="fas fa-comments"></i></span>
+                        <span class="menu-item-link-text">Chat and Calls</span>
+                    </a>
+
+                </li>
+                <li class="menu-item-li">
+                    <a class="menu-item-link" href="#">
+                        <span class="menu-item-icon"><i class="fas fa-users"></i></span>
+                        <span class="menu-item-link-text">Workgroups</span>
+                    </a>
+
+                </li>
+                <li class="menu-item-li">
+                    <a class="menu-item-link" href="#">
+                        <span class="menu-item-icon"><i class="fas fa-hdd"></i></span>
+                        <span class="menu-item-link-text">CRM Drive</span>
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--End Menu Section-->
+    <main class="menu-switcher">
+        
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="page-header">
+                    <!--Main Page Menu-->
+                    <div class="page-header-buttons">
+                        <ul>
+                            <li class="page-header-buttons-items ">
+                                <a class="" href="index.html">Dashboard</a>
+                               
+                            </li>
+                            <li class="page-header-buttons-items can-add">
+                                <a class="" href="contacts.html">Contacts</a>
+                                <a class="page-header-plus contact" href="#"><i
+                                        class="fas fa-plus add-new-contact-icon"></i></a>
+                            </li>
+                            <li class="page-header-buttons-items can-add">
+                                <a class="page-header-active" href="companies.html">Companies</a>
+                                <a class="page-header-plus contact" href="#"><i
+                                        class="fas fa-plus add-new-contact-icon"></i></a>
+                            </li>
+                            <li class="page-header-buttons-items can-add"> 
+                                <a class="" href="appointments.html">Appointments</a> 
+                                <a class="page-header-plus contact" href="#"><i
+                                    class="fas fa-plus add-new-contact-icon"></i></a>
+                            </li>
+                            <li class="last-item page-header-buttons-items">
+                                <a href="#">More<i class="fas fa-caret-down ml-1 "></i></a> </li>
+                        </ul>
+                    </div>
+                    <!--End Main Page Menu-->
+
+                    
+                    <div class="page-title-wrap">
+                        <div class="page-title-inner">
+                            <!--Main Page Header-->
+                            <div class="page-title-menu">
+                                <span class="pagetitle-menu-text">Contacts</span>
+                            </div>
+                            <!--End Main Page Header-->
+
+                            <!--Main Page Search-->
+                            <div class="page-search">
+                                <input class="main-filter-search" type="text" placeholder="Search">
+
+                                <div class="search-popup-main col-lg-12 col-md-12 col-sm-12">
+                                    <i class="fas fa-times close-popup-setting"></i>
+                                    <div class="col-lg-3 popup-search-filter-main">
+                                        <h6 class="text-uppercase text-center">filters</h6>
+                                    </div>
+                                    <div class="col-lg-9 popup-search-inputs-main">
+                                        <span class="label-input-setting">Name</span>
+                                        <input type="text" class="dropdown-setting-company">
+                                        <!-- <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select> -->
+
+                                        <span class="label-input-setting">Document number</span>
+                                        <input type="text" class="dropdown-setting-company">
+                                        <!-- <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select> -->
+
+                                        <span class="label-input-setting">VOEN</span>
+                                        <input type="text" class="dropdown-setting-company">
+
+                                        <span class="label-input-setting">Telephone</span>
+                                        <input type="text" class="dropdown-setting-company">
+
+                                        <span class="label-input-setting">Vehicle RegNr</span>
+                                        <input type="text" class="dropdown-setting-company">
+
+                                        <hr>
+                                        <div class="save-company">
+                                            <button class="save-company-setting-button">search</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End Main Page Search-->
+
+                            <!--Main Page Toolbar-->
+                            <div class="toolbar-add-list">
+                                <button class="toolbar-option-list"><i class="fas fa-cog"></i></button>
+
+                                <a class="add-new-contact-button" href="#"><i class="fas fa-plus"></i>ADD</a>
+                            </div>
+                            <!--End Main Page Toolbar-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid menu-container ">
+            <div class="row">
+                <div class="content-area">
+                    <table class="contact-table">
+                        <thead class="contact-table-header">
+                            <tr>
+                                <td>Name</td>
+                                <td>VOEN</td>
+                                <td>List</td>
+                            </tr>
+                        </thead>
+                        <tbody class="contact-table-body">
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                            <tr>
+                                <td>Mammad Mammadov</td>
+                                <td>55555555</td>
+                                <td>12.12.2020</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+           
+        </div>
+
+
+        <!--Right Menu Bar Section-->
+        <div class="right-bar">
+            <div class="bar-help-box">
+                <div class="help-icon-box">
+                    <i class="fas fa-question-circle help-icon"></i>
+                </div>
+            </div>
+            <div class="bar-notify-box">
+                <div class="notify-icon-box">
+                    <i class="fas fa-bell notify-icon"></i>
+                </div>
+            </div>
+            <div class="bar-search-box">
+                <div class="search-icon-box">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <div class="bar-dial-box">
+                <div class="dial-icon-box">
+                    <i class="fas fa-phone-alt dial-icon"></i>
+                </div>
+            </div>
+        </div>
+        <!--End Right Menu Bar Section-->
+
+    </main>
+    <footer></footer>
+
+    <!--Popup Add New Contact-->
+    <div class="slide-panel">
+        <div class="slide-panel-container">
+            <div class="row">
+                <div class="popup-frame-header">
+                    <h4 class="text-center text-light" style="line-height: 80px;">Header(Example)</h4>
+                </div>
+            </div>
+            <div class="row col-lg-12">
+                <div class="popup-frame-body-container">
+                    <div class="popup-frame-menu">
+                        <ul class="popup-frame-menu-list">
+                            <li class="popup-frame-menu-item"> <a class="popup-frame-link-active" href="#"> General</a>
+                            </li>
+                            <li class="popup-frame-menu-item"><a href="#"> Deals</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Quotes</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Invoices</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> History</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Profile</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Applications</a></li>
+                        </ul>
+                    </div>
+                    <div class="popup-frame-body ">
+                        <div class="popup-frame-card-container">
+                            <div class="popup-frame-card-content">
+                                <form class="contact-form" action="">
+
+                                    <div class="contact-form-content">
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- <div class="popup-frame-menu">
+                            <ul class="popup-frame-menu-list">
+                                <li class="popup-frame-menu-item"> <a class="page-header-active" href="#"> General</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Deals</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Quotes</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Invoices</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> History</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Profile</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Applications</a></li>
+                            </ul>
+                        </div> -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="slide-panel-label">
+
+            <div class="slide-panel-close">
+                <div class="slide-panel-close-btn-inner">
+
+                    <i class="fas fa-times close-slide-panel-icon"></i>
+                </div>
+            </div>
+            <span class="slide-panel-label-text">Company</span>
+        </div>
+    </div>
+    <!--End Popup Add New Contact-->
+
+    <!--Search Slide Panel-->
+    <div class="search-slide-panel">
+        <div class="slide-panel-container">
+            
+            <div class="row col-lg-12">
+                <div class="popup-frame-body-container">
+                    <div class="popup-frame-menu">
+                        <ul class="popup-frame-menu-list">
+                            <li class="popup-frame-menu-item"> <a class="popup-frame-link-active" href="#"> General</a>
+                            </li>
+                            <li class="popup-frame-menu-item"><a href="#"> Deals</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Quotes</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Invoices</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> History</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Profile</a></li>
+                            <li class="popup-frame-menu-item"><a href="#"> Applications</a></li>
+                        </ul>
+                    </div>
+                    <div class="popup-frame-body ">
+                        <div class="popup-frame-card-container">
+                            <div class="popup-frame-card-content">
+                                <form class="contact-form" action="">
+
+                                    <div class="contact-form-content">
+                                        <span class="label-input-setting">Title</span>
+                                        <input type="text" >
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                        <select class="dropdown-setting-company">
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                            <option value="Test">Test</option>
+                                        </select>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- <div class="popup-frame-menu">
+                            <ul class="popup-frame-menu-list">
+                                <li class="popup-frame-menu-item"> <a class="page-header-active" href="#"> General</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Deals</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Quotes</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Invoices</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> History</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Profile</a></li>
+                                <li class="popup-frame-menu-item"><a href="#"> Applications</a></li>
+                            </ul>
+                        </div> -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="slide-panel-label">
+
+            <div class="slide-panel-close">
+                <div class="slide-panel-close-btn-inner">
+
+                    <i class="fas fa-times close-slide-panel-icon"></i>
+                </div>
+            </div>
+            <span class="slide-panel-label-text">Contact</span>
+        </div>
+    </div>
+    <!--End Search Slide Panel-->
+
+    <!--Popup Phone Call-->
+    <div class="phone-call-popup-keypad">
+        <div class="keypad-content">
+            <div class="keypad-body">
+                <div class="keypad-body-panel">
+                    <input id="keypad-body-panel-input" value="+" type='tel' id='tel' class="keypad-body-panel-input" placeholder="Enter number" type="text">
+                    <img id="deletenumber" src="image/iconfinder_delete_227590.ico" alt="">
+                    
+                </div>
+                <div class="keypad-body-buttons-block">
+                    <span class="keypad-body-button keypad-body-button-1">
+                        <span class="keypad-body-button-num" data-number="1">1</span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-2">
+                        <span class="keypad-body-button-num" data-number="2">2 <span class="num-text">ABC</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-3">
+                        <span class="keypad-body-button-num" data-number="3">3 <span class="num-text">DEF</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-4">
+                        <span class="keypad-body-button-num" data-number="4">4 <span class="num-text">GHI</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-5">
+                        <span class="keypad-body-button-num" data-number="5">5 <span class="num-text">JKL</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-6">
+                        <span class="keypad-body-button-num" data-number="6">6 <span class="num-text">MNO</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-7">
+                        <span class="keypad-body-button-num" data-number="7">7 <span class="num-text">PQRS</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-8">
+                        <span class="keypad-body-button-num" data-number="8">8 <span class="num-text">TUV</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-9">
+                        <span class="keypad-body-button-num" data-number="9">9 <span class="num-text">WXYZ</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-10">
+                        <span class="keypad-body-button-num" data-number="*">*</span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-0">
+                        <span class="keypad-body-button-num" data-number="0">0 <span class="num-text">+</span></span>
+                    </span>
+                    <span class="keypad-body-button keypad-body-button-11">
+                        <span class="keypad-body-button-num" data-number="#">#</span>
+                    </span>
+                </div>
+                <div class="keypad-body-call-button-wrap">
+                        <span class="keypad-body-call-button">
+                            <span class="call-button-text">Call</span>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="call-popup-angle"></div>
+    </div>
+    
+
+    </div>
+    <!--End Popup Phone Call-->
+
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

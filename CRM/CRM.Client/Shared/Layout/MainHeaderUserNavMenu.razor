@@ -1,0 +1,16 @@
+﻿@inherits BaseComponent
+<div id="user-show-popup" class="position-absolute w-100">
+    <div class="menu-popup-items">
+        @*<a class="menu-popup-item" href="#">My Profile</a>
+            <a class="menu-popup-item" href="#">Themes</a>
+            <a class="menu-popup-item" href="#">My CRM network page</a>
+            <a class="menu-popup-item" href="#">Configure notifications</a>
+            <a class="menu-popup-item" href="#">Upgrade your plan</a>*@
+        <a class="menu-popup-item btn btn-outline-light w-100 text-left py-3" type="button" @onclick="@(() => Modal.Show<CRM.Client.Pages.Logout>("MainMenu.Logout".Translate()) )">
+        	@("MainMenu.Logout".Translate())
+        </a>
+    </div>
+    <div class="popup-angle-up">
+
+    </div>
+</div>

@@ -1,0 +1,248 @@
+﻿@inherits BaseComponent;
+@using OneOf;
+
+<style>
+    input, select {
+        font-size: 14px !important;
+    }
+
+    input, select, #appointmentcard .blazored-typeahead__input {
+        border: 1px solid #d9d9d9 !important;
+        border-radius: 2px !important;
+        width: 100%;
+        height: 32px !important;
+    }
+
+        input:hover, select:hover, #appointmentcard .blazored-typeahead__input:hover {
+            border-color: #1890ff !important;
+        }
+
+        input:focus, select:focus, #appointmentcard .blazored-typeahead__input:focus {
+            box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25) !important;
+            transition: box-shadow .3s;
+        }
+
+    .ant-picker {
+        height: 32px;
+    }
+
+    .ant-picker-input input {
+        border: none !important;
+    }
+
+        .ant-picker-input input:focus {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+    input[placeholder], select::selection {
+        font-size: 12px;
+        padding-left: 10px;
+    }
+
+    .blazored-typeahead.invalid {
+        border: none !important;
+    }
+
+    .blazored-typeahead.modified.valid {
+        border: none !important;
+    }
+
+    .blazored-typeahead__input-mask {
+        border: 1px solid #d9d9d9 !important;
+        border-radius: 2px !important;
+        height: 32px;
+        display: flex;
+        align-items: center;
+    }
+
+    .col-9 .blazored-typeahead__controls {
+        height: auto !important;
+    }
+
+    .blazored-typeahead__clear {
+        height: 32px !important;
+    }
+
+    /*Marketing*/
+    /*event in day or week view*/
+    .dhx_cal_event.marketing div {
+        background-color: green !important;
+        color: black !important;
+    }
+
+    .dhx_cal_event.selling div {
+        background-color: yellow !important;
+        color: black !important;
+    }
+
+    .dhx_cal_event.afterSelling div {
+        background-color: crimson !important;
+        color: black !important;
+    }
+
+
+    /*multi-day event in month view*/
+    .dhx_cal_event_line.marketing {
+        background-color: green !important;
+        color: black !important;
+    }
+
+    .dhx_cal_event_line.selling {
+        background-color: yellow !important;
+        color: black !important;
+    }
+
+    .dhx_cal_event_line.afterSelling {
+        background-color: crimson !important;
+        color: black !important;
+    }
+
+    /*event with fixed time, in month view*/
+    .dhx_cal_event_clear.marketing {
+        color: black !important;
+    }
+
+    .dhx_cal_event_clear.selling {
+        color: black !important;
+    }
+
+    .dhx_cal_event_clear.afterSelling {
+        color: black !important;
+    }
+</style>
+
+<div class="dhx_cal_light dhx_cal_light_wide" id="appointmentcard" style="visibility: visible; display: none;">
+    <div class="dhx_cal_larea d-flex align-items-center justify-content-center">
+        <div style="@(DateTime.Compare(Convert.ToDateTime(Model.end_date), DateTime.Now) > 0 ? "pointer-events: none;" : "")" class="p-4 mx-auto dhx_content">
+            <EditForm Model="Modal" OnValidSubmit="@(()=>Save(Model))">
+                <DataAnnotationsValidator />
+                <div id="form-changeable">
+                    <div class="pb-2">
+                        <label for="title">@("AppointmentCard.Title".Translate())</label>
+                        <InputText type="text" @bind-Value="Model.text" id="title" class="form-control" />
+                        <ValidationMessage For="@(() => Model.text)" />
+                    </div>
+                    <div class="pb-2">
+                        <label for="description">@("AppointmentCard.Description".Translate())</label>
+                        <InputText type="text" @bind-Value="Model.Description" id="description" class="form-control" />
+                    </div>
+                    <div class="pb-2">
+                        <label for="client-name">@("AppointmentCard.ClientName".Translate())</label>
+                        <div>
+                            <div class="row m-0">
+                                <div class="col-3 p-0 pr-3">
+                                    <select class="form-control" @onchange="OnSearchCriteriaChanged">
+                                        <option value="pin">@("Client.PinNumber".Translate())</option>
+                                        <option value="tin">@("Client.TinNumber".Translate())</option>
+                                        <option value="name">@("Client.Name".Translate())</option>
+                                        <option value="companyname">@("Client.CompanyNameSearch".Translate())</option>
+                                        <option value="number">@("Client.ContactValue".Translate())</option>
+                                        <option value="document">@("Client.DocumentNumber".Translate())</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" id="inn" @onchange="OnInnChange" />
+                                <div class="col-9 p-0">
+                                    <BlazoredTypeahead SearchMethod="SearchClient" Debounce="1400" @bind-Value="Model.SelectedClient">
+                                        <SelectedTemplate Context="client">
+                                            @(string.IsNullOrEmpty(client.CompanyName) ?
+                                                $"{client.FirstName} {client.LastName} {client.FatherName} (INN - {client.INN})" :
+
+                                                $"{client.CompanyName} (INN - {client.INN})")
+                                        </SelectedTemplate>
+
+                                        <ResultTemplate Context="rclient">
+                                            @if (!string.IsNullOrEmpty(rclient.CompanyName))
+                                            {
+                                                <p>@($"{rclient.CompanyName} (INN - {rclient.INN})")</p>
+                                            }
+                                            @if (!string.IsNullOrEmpty(rclient.FirstName) || !string.IsNullOrEmpty(rclient.LastName) || !string.IsNullOrEmpty(rclient.FatherName))
+                                            {
+                                                <p>@($"{rclient.FirstName} {rclient.LastName} {rclient.FatherName} (INN - {rclient.INN})")</p>
+                                            }
+                                        </ResultTemplate>
+                                    </BlazoredTypeahead>
+                                    <ValidationMessage For="@(() => Model.SelectedClient)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pb-2">
+                        <label for="timeperiod">@("AppointmentCard.TimePeriod".Translate())</label>
+                        <TimePeriod Id="timeperiod"></TimePeriod>
+                    </div>
+
+                    <div class="pb-2">
+                        <label for="timeperiod">@("AppointmentCard.EventTypes".Translate())</label>
+                        <InputSelect @bind-Value="@Model.TypeId" class="form-control" name="types" id="typeId">
+                            @foreach (var item in TypeList)
+                            {
+                                <option class="form-control" @key="@item.CodeOid" value="@item.CodeOid">@item.Value</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Model.TypeId)" />
+                    </div>
+                    @*<div class="pb-2">
+                    <label for="timeperiod">@("AppointmentCard.TimePeriod".Translate())</label>
+                    <div class="row time-range-selection">
+                    <div class="col-6">
+                    <DatePicker TValue="DateTime?" ShowTime="@true"
+                    DefaultValue="new DateTime(2020, 05, 11, 0, 0, 0)"
+                    Format="dd-MM-yyyy HH:mm:ss"
+                    DisabledDate="date => date <= DateTime.Now"
+                    DisabledTime="date => GetDisabledTime(date)" />
+                    </div>
+                    <div class="col-6">
+                    <DatePicker TValue="DateTime?" ShowTime="@true"
+                    DefaultValue="new DateTime(2020, 05, 11, 0, 0, 0)"
+                    Format="dd-MM-yyyy HH:mm:ss"
+                    DisabledDate="date => date <= DateTime.Now"
+                    DisabledTime="date => GetDisabledTime(date)" />
+                    </div>
+                    </div>
+                    </div>*@
+
+                    <div class="pb-2">
+                        <label for="status">@("AppointmentCard.Status".Translate())</label>
+                        <InputSelect class="form-control" id="appointmentstatus" @bind-Value="Model.Status">
+                            <option selected value="0">@("AppointmentCard.Active".Translate())</option>
+                            <option value="1">@("AppointmentCard.Cancelled".Translate())</option>
+                        </InputSelect>
+                    </div>
+
+                    <div class="pb-3">
+                        <label for="location">@("AppointmentCard.Location".Translate())</label>
+                        <InputText @bind-Value="Model.Location" type="text" class="form-control" id="location" />
+                    </div>
+
+                </div>
+                <div class="pb-3" id="appointment-comments">
+                    <label for="location">@("AppointmentCard.CommentsAfterAppointent".Translate())</label>
+                    <TextArea @bind-Value="Model.CommentsAfterAppointent" type="text" id="comments-after-appointent" class="form-control" cols="5" rows="5"></TextArea>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-danger smaller-font option-button" name="Delete" value="Delete" id="delete" @onclick="Delete">@("AppointmentCard.Delete".Translate())</button>
+                    <div>
+                        <button class="btn btn-warning smaller-font mr-2 option-button" name="Close" value="Close" id="close" @onclick="Close">@("AppointmentCard.Cancel".Translate())</button>
+                        <button class="btn btn-success smaller-font option-button" name="Save" value="Save" id="save">@("AppointmentCard.Save".Translate())</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    //AntDesign DatePicker component codes
+    private DatePickerDisabledTime GetDisabledTime(DateTime date)
+    {
+        int[] timeRange = new int[60];
+        for (int i = 0; i < timeRange.Length; i++)
+        {
+            timeRange[i] = i;
+        }
+
+        return new DatePickerDisabledTime(timeRange[4..15], timeRange[20..55], timeRange[3..19]);
+    }
+}

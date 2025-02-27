@@ -1,0 +1,92 @@
+﻿@page "/login"
+@layout LoginLayout
+@inherits LoginBase
+@using CRM.Operation.Models.Login
+
+
+    <EditForm Model="@LoginModel" OnValidSubmit="@(()=>LoginAsync(LoginModel))" class="login100-form">
+        <DataAnnotationsValidator />
+        <div class="login100-form-title mb-3">
+            <img class="img-responsive" style="width:100%;" src="image/logo.png" alt="">
+            <h3 class="pt-2" style="color: #f89c31">CRM</h3>
+        </div>
+        <div>
+            @*<div class="form-group">
+                <div class="wrap-input100 validate-input">
+                    <InputText id="login" name="login" class="input100" placeholder=@("LoginModel.Login".Translate()) @bind-Value="@LoginModel.Login" />
+                    <span class="focus-input100"></span>*@
+                    @*<span class="label-input100">Login</span>*@
+                @*</div>
+                <ValidationMessage For="@(() => LoginModel.Login)" />
+            </div>*@
+
+            <div class="input-wrapper py-1">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-user px-3"></i>
+                        </span>
+                    </div>
+                    <InputText id="login" name="login" class="form-control" placeholder=@("LoginModel.Login".Translate()) @bind-Value="@LoginModel.Login" />
+                </div>
+                <div class="py-1">
+                    <ValidationMessage For="@(() => LoginModel.Login)" />
+                </div>
+            </div>
+
+
+
+            @*<div class="form-group">
+                <div class="wrap-input100 validate-input">
+                    <InputText id="password" type="password" class="input100" placeholder=@("Password".Translate()) @bind-Value="@LoginModel.Password" />
+                    <span class="focus-input100"></span>*@
+                    @*<span class="label-input100">Password</span>*@
+
+                    @*</div>
+                <ValidationMessage For="@(() => LoginModel.Password)" />
+            </div>*@
+
+            <div class="input-wrapper py-1">
+                <div class="input-group position-relative">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock px-3"></i>
+                        </span>
+                    </div>
+                    <InputText id="password" type="@PassType" class="form-control" placeholder=@("Password".Translate()) @bind-Value="@LoginModel.Password" />
+                    <button class="d-flex align-items-center toggle-password position-absolute h-100" type="button" @onclick="TogglePassword">
+                        <i class="fa @IconClass px-3"></i>
+                    </button>
+                </div>
+                <div class="py-1">
+                    <ValidationMessage For="@(() => LoginModel.Password)" />
+                </div>
+            </div>
+
+            <div class="container-login100-form-btn mt-3">
+                <input type="submit" value="@("Login.Signing".Translate())" class="login100-form-btn w-100 text-center text-uppercase" />
+            </div>
+        </div>
+    </EditForm>
+
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+@code {
+    public string PassType = "password";
+    public string IconClass = "fa-eye";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await localStorage.SetItemAsync("name", "John Smith");
+        var name = await localStorage.GetItemAsync<string>("name");
+        Console.WriteLine(name);
+    }
+
+    public void TogglePassword()
+    {
+        PassType =
+            PassType == "password" ? PassType = "text" : PassType = "password";
+        IconClass =
+            IconClass == "fa-eye" ? IconClass = "fa-eye-slash" : IconClass = "fa-eye";
+    }
+}

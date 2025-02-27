@@ -1,0 +1,73 @@
+﻿@using CRM.Client.States
+@inherits BaseComponent
+@inject IComponentService Comp;
+@{
+    bool? IsUnderwriterUser()
+    {
+        var authState = ServerAuthenticationStateTask as ServerAuthenticationStateProvider;
+        return authState?.IsUnderwriterUser();
+    }
+
+    bool? IsOperuUser()
+    {
+        var authState = ServerAuthenticationStateTask as ServerAuthenticationStateProvider;
+        return authState?.IsOperuUser();
+    }
+}
+<!--Main Page Menu-->
+<div class="page-header-buttons">
+    <ul class="d-flex list-unstyled m-0 px-4">
+        <li class="page-header-buttons-items can-add h-100 position-relative">
+            <MainMenuLink Href="" ActiveClass="page-header-active" HrefMatch="MainMenuLinkMatch.Exact">
+                @("Dashboard".Translate())
+            </MainMenuLink>
+        </li>
+        <li class="page-header-buttons-items can-add h-100 position-relative">
+            <MainMenuLink Href="contacts" ActiveClass="page-header-active">
+                @("Contacts".Translate())
+            </MainMenuLink>
+            <AuthorizeView Roles="CRMCanCreate">
+                <a class="page-header-plus contact position-absolute w-100 d-flex justify-content-center"
+                   @onclick="@(() => { ComponentParameters param = new ComponentParameters();
+                          param.Add(nameof(ContactCard.ClientContractModel), new ClientContract());
+                          Comp.Show<ContactCard>("Contact", param); })">
+                    <i class="fas fa-plus add-new-contact-icon d-flex align-items-center justify-content-center"></i>
+                </a>
+            </AuthorizeView>
+        </li>
+        <li class="page-header-buttons-items can-add h-100 position-relative">
+            <MainMenuLink Href="companies" ActiveClass="page-header-active">
+                @("Companies".Translate())
+            </MainMenuLink>
+            <AuthorizeView Roles="CRMCanCreate">
+                <a class="page-header-plus contact position-absolute w-100 d-flex justify-content-center"
+                   @onclick="@(() => { ComponentParameters param = new ComponentParameters();
+                          param.Add(nameof(CompanyCard.ClientContractModel), new ClientContract());
+                          Comp.Show<CompanyCard>("Contact", param); })">
+                    <i class="fas fa-plus add-new-contact-icon d-flex align-items-center justify-content-center"></i>
+                </a>
+            </AuthorizeView>
+        </li>
+        @if (IsUnderwriterUser() != null || IsOperuUser() != null)
+        {
+            <li class="page-header-buttons-items can-add h-100 position-relative">
+                <MainMenuLink Href="deals" ActiveClass="page-header-active">
+                    @("Deals".Translate())
+                </MainMenuLink>
+                @if (IsUnderwriterUser() == false)
+                {
+                    <a class="page-header-plus contact position-absolute w-100 d-flex justify-content-center"
+                       @onclick="@(() => { ComponentParameters param = new ComponentParameters(); Comp.Show<DealCardForSeller>("Deal"); })">
+                        <i class="fas fa-plus add-new-contact-icon d-flex align-items-center justify-content-center"></i>
+                    </a>
+                }
+            </li>
+        }
+        <li class="page-header-buttons-items can-add h-100 position-relative">
+            <MainMenuLink Href="appointments" ActiveClass="page-header-active">
+                @("Appointments".Translate())
+            </MainMenuLink>
+        </li>
+    </ul>
+</div>
+<!--End Main Page Menu-->

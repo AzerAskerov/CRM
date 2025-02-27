@@ -1,0 +1,113 @@
+﻿@typeparam TRowData
+@*
+    <CascadingValue> allows descendant components (defined in ChildContent) to receive the specified value.
+    Child components need to declare a cascading parameter with the same type as "Value" (i.e. Grid<TRowData>).
+    This allows GridColumn to get the Grid instance by using a CascadingParameter
+
+        [CascadingParameter]public Grid<TRowData> OwnerGrid { get; set; }
+
+    IsFixed="true" indicates that "Value" will not change. This is a
+    performance optimization that allows the framework to skip setting up
+    change notifications.
+*@
+<CascadingValue IsFixed="true" Value="this">@ChildContent</CascadingValue>
+
+@* Render the table *@
+<table @attributes="@TableAttributes"  class="table table-hover">
+    <thead>
+
+        <tr>
+            @if (gridColumnCommand != null && gridColumnCommand.Actions != null)
+            {
+                <th>
+
+                </th>
+            }
+            @foreach (var column in columns)
+            {
+
+                @column.HeaderTemplate
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Items != null)
+            {
+                var index = 0;
+                foreach (var item in Items)
+                {
+                    @* Use @key to help the diff algorithm when updating the collection *@
+                    <tr @key="item.GetHashCode()" class="@(RowClass?.Invoke(item, index++))">
+
+                        @if (gridColumnCommand != null && gridColumnCommand.Actions != null)
+                        {
+                            <td class="d-flex align-items-baseline">
+                                @*<div class="dropdown">
+                                        <button data-toggle="dropdown" class=""> ...</button>
+                                        <div class="dropdown-menu">
+                                            <a href="" class="dropdown-item">Edit</a>
+                                            <a href="" class="dropdown-item">Add</a>
+                                            <a></a>
+                                        </div>
+                                    </div>*@
+
+                                <a title="@gridColumnCommand.Actions.FirstOrDefault().Text" onmouseover="" style="cursor: pointer;"
+                                   @onclick="@(() => gridColumnCommand.Actions.FirstOrDefault().ActionName.Invoke(item))">
+                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                </a>
+
+                            </td>
+                        }
+                        @foreach (var column in columns)
+                        {
+                            @column.CellTemplate(item)
+                        }
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> TableAttributes { get; set; }
+
+    [Parameter]
+    public ICollection<TRowData> Items { get; set; }
+
+    // This fragment should contains all the GridColumn
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public Func<TRowData, int, string> RowClass { get; set; }
+
+    private readonly List<GridColumn<TRowData>> columns = new List<GridColumn<TRowData>>();
+
+    private GridColumnCommand<TRowData> gridColumnCommand = new GridColumnCommand<TRowData>();
+
+    // GridColumn uses this method to add a column
+    internal void AddColumn(GridColumn<TRowData> column)
+    {
+        columns.Add(column);
+    }
+
+    internal void AddColumn(GridColumnCommand<TRowData> column)
+    {
+        gridColumnCommand = column;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // The first render will instantiate the GridColumn defined in the ChildContent.
+            // GridColumn calls AddColumn during its initialization. This means that until
+            // the first render is completed, the columns collection is empty.
+            // Calling StateHasChanged() will re-render the component, so the second time it will know the columns
+            StateHasChanged();
+        }
+    }
+}

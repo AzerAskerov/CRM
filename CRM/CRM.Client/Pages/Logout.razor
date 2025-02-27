@@ -1,0 +1,9 @@
+﻿@inherits LogoutBase
+<div>
+    <p>@("Logout.LogoutMessage".Translate())</p>
+
+    <button @onclick="Close" class="btn btn-primary">@("Logout.Yes".Translate())</button>
+    <button @onclick="Cancel" class="btn btn-secondary">@("Logout.No".Translate())</button>
+</div>
+
+

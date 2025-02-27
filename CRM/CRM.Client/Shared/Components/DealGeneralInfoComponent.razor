@@ -1,0 +1,61 @@
+﻿@using CRM.Operation.Models.DealOfferModels
+@using System.Globalization
+
+<div class="row">
+    <div class="col">
+        <p class="mb-1">@("DealNumber".Translate()):</p>
+        <h5>@DealNumber</h5>
+    </div>
+    <div class="col">
+        <p class="mb-1">@("CreatedByUser.FullName".Translate()):</p>
+        <h5>@SellerUserFullname</h5>
+    </div>
+    <div class="col">
+        <p class="mb-1">@("UnderwriterUser.FullName".Translate()):</p>
+        <h5>@UnderwriterUserFullname</h5>
+    </div>
+    <div class="col">
+        <p class="mb-1">@("ResponsiblePersonType".Translate()):</p>
+        <h5>@ResponsiblePersonType.Translate()</h5>
+    </div>
+    <div class="col">
+        <p class="mb-1">@("DealModel.CreatedTimeStamp".Translate()):</p>
+        <h5>@DealModel.CreatedTimeStamp.ToString(CultureInfo.InvariantCulture)</h5>
+    </div>
+    <div class="col">
+        <p class="mb-1">@("DealModel.DealStatus".Translate()):</p>
+        <h5>@DealModel.DealStatus.ToString().Translate()</h5>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public DealModel DealModel { get; set; }
+
+    public string ResponsiblePersonType => DealModel.ResponsiblePersonType.ToString();
+
+    public string UnderwriterUserFullname => DealModel.UnderwriterUser is null ? "" : DealModel.UnderwriterUser.FullName;
+
+    public string SellerUserFullname => DealModel.CreatedByUser is null ? "" : DealModel.CreatedByUser.FullName;
+    public string DealNumber => DealModel.DealNumber ?? "";
+
+    public void Refresh(CRM.Operation.Models.Login.UserSummaryShort currentUser, Guid newDealGuid)
+    {
+        DealModel.UnderwriterUser = null;
+        DealModel.DealStatus = (int)CRM.Data.Enums.DealStatus.New;
+        DealModel.DealGuid = newDealGuid;
+        DealModel.ResponsiblePersonType = Data.Enums.DealResponsiblePersonTypeEnum.Seller;
+        DealModel.DealDiscussionModel = new DealDiscussionModel();
+        DealModel.DealNumber = string.Empty;
+        DealModel.CreatedTimeStamp = DateTime.Now;
+        DealModel.Offers = new List<OfferViewModel>();
+        DealModel.CreatedByUser = new Operation.Models.Login.UserSummaryShort {
+            UserGuid = currentUser.UserGuid,
+            Login = currentUser.Login,
+            FullName = currentUser.FullName
+        };
+        DealModel.Survey.DealGuid = newDealGuid;
+        StateHasChanged();
+    }
+    
+}

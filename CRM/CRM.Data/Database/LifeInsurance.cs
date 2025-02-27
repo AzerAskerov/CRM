@@ -1,0 +1,22 @@
+﻿using System;
+
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
+namespace CRM.Data.Database
+{
+    public partial class LifeInsurance
+    {
+        public Guid DealGuid { get; set; }
+        public int PolicyPeriodOid { get; set; }
+        public int CurrencyOid { get; set; }
+        public int PaymentTypeOid { get; set; }
+        public string EmailToNotify { get; set; }
+        public decimal Commission { get; set; }
+        public bool IsRenew { get; set; }
+        public string ExistingPolicyNumber { get; set; }
+
+        public virtual Deal Deal { get; set; }
+    }
+}

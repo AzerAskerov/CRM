@@ -1,0 +1,305 @@
+﻿@inherits BaseComponent
+@using CRM.Data.Enums;
+<div id="print">
+    <h1 class="general-title">@OfferTypeEnum.VehicleInsurance.ToString().Translate()</h1>
+    <div class="with-underline">
+        <h6>@("CardComponent.OnlyInsured".Translate())</h6>
+        <p>@DealModel?.Client?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6>
+            @("OfferModel.PinOrTin".Translate())
+        </h6>
+        @if (DealModel?.Client?.ClientType == ClientType.Company)
+        {
+            <p> @DealModel?.Client?.Documents?.FirstOrDefault(x => x.DocumentType == 2)?.DocumentNumber</p>
+        }
+        else
+        {
+            <p>@DealModel?.Client?.PinNumber</p>
+        }
+    </div>
+    <div class="with-underline">
+        <h6>@("Client.Beneficiary".Translate())</h6>
+        <p>@OfferModel?.Beneficiary?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.PaymentTypeOid".Translate())</h6>
+        <p>@OfferModel?.PaymentType</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.CurrencyOid".Translate())</h6>
+        <p>@OfferModel?.Currency</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.PolicyPeriodOid".Translate())</h6>
+        <p>@OfferModel?.PolicyPeriod</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.Commission".Translate())</h6>
+        <p>@OfferModel?.Commission</p>
+    </div>
+    @if (DealModel?.Client?.ClientType ==  ClientType.Company)
+    {
+        <div class="with-underline">
+            <h6>@("OfferModel.CompanyActivityType".Translate())</h6>
+            <p>@OfferModel?.CompanyActivityType</p>
+        </div>
+    }
+    @if (DealModel?.Client?.ClientType ==  ClientType.Company)
+    {
+
+        <div class="with-underline">
+            <h6>@("Client.VehicleInfo".Translate())</h6>
+            <p>@("OfferModel.Attachment1".Translate())</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.ModelAndBrand".Translate())</h6>
+            <p>@("OfferModel.Attachment1".Translate())</p>
+        </div>
+
+        <div class="with-underline">
+            <h6>@("OfferModel.ManufactureYear".Translate())</h6>
+            <p>@("OfferModel.Attachment1".Translate())</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.MarketValueOfVehicle".Translate())</h6>
+            <p>@("OfferModel.Attachment1".Translate())</p>
+        </div> <div class="with-underline">
+            <h6>@("OfferModel.EngineCapacity".Translate())</h6>
+            <p>@("OfferModel.Attachment1".Translate())</p>
+        </div>
+    }
+    <div class="with-underline">
+        <h6>@("OfferModel.InsuranceArea".Translate())</h6>
+        <p>@OfferModel?.InsuranceArea</p>
+    </div>
+    @if (DealModel?.Client?.ClientType ==  ClientType.Company)
+    {
+        <div class="with-underline">
+            <h6>@("OfferModel.CompanyActivityType".Translate())</h6>
+            <p>@OfferModel?.CompanyActivityType</p>
+        </div>
+    }
+    <div class="with-underline">
+        <h6>@("OfferModel.SumInsured".Translate())</h6>
+        <p>@DealModel?.SumInsured</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("LanguageSelection".Translate())</h6>
+        <p>@DealModel?.OfferLang</p>
+    </div>
+
+    <div class="with-underline">
+        <h6>@("DealMode.ClientPhoneNumber".Translate())</h6>
+        <p>@DealModel?.ClientPhoneNumber</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("DealMode.SurveyContactInfo".Translate())</h6>
+        <p>@DealModel?.SurveyContactInfo</p>
+    </div>
+    @if (DealModel?.Client?.ClientType ==  ClientType.Company)
+    {
+        <div class="with-underline">
+            <h6>@("OfferModel.UnconditionalExemptionAmount".Translate())</h6>
+            <p>@OfferModel?.UnconditionalExemptionAmount</p>
+        </div>
+    }
+
+    <div class="with-underline">
+        <h6>@("OfferModel.LostHistoryForTheLastFiveYears".Translate())</h6>
+        <p>@OfferModel?.LastFiveYearLossHistory</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.DeductibleAmountOid".Translate())</h6>
+        <p>@OfferModel?.DeductibleAmount</p>
+    </div>
+    @if (DealModel?.Client?.ClientType == ClientType.Pyhsical)
+    {
+
+        var vehicle = Vehicles?.FirstOrDefault();
+        <div class="with-underline">
+            <h6>@("OfferModel.CountOfInsuredSeats".Translate())</h6>
+            <p>@vehicle?.CountOfInsuredSeats</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.MarketValueOfVehicle".Translate())</h6>
+            <p>@vehicle?.MarketValueOfVehicle</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.EngineCapacity".Translate())</h6>
+            <p>@vehicle?.EngineCapacity</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.ManufactureYear".Translate())</h6>
+            <p>@vehicle?.ManufactureYear</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.NumberOfSeats".Translate())</h6>
+            <p>@vehicle?.NumberOfSeats</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.OfficialServiceRequired".Translate())</h6>
+            <p>@vehicle?.OfficialServiceRequired</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("DropDown.PersonalAccidentInsuranceOfDriverAndPassengerItemsOid".Translate())</h6>
+            @if (!string.IsNullOrEmpty(vehicle?.PersonalAccidentInsuranceOfDriverAndPassengerItems))
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="with-underline">
+            <h6>@("DropDown.PropertyLiabilityInsuranceItemsOid".Translate())</h6>
+            @if (!string.IsNullOrEmpty(vehicle?.PropertyLiabilityInsuranceItems))
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="with-underline">
+            <h6>@("DropDown.SelectedVehicleUsagePurposeOid".Translate())</h6>
+            <p>@vehicle?.SelectedVehicleUsagePurpose</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("DropDown.VehBrandOid".Translate())</h6>
+            <p>@vehicle?.VehBrand</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("DropDown.VehModelOid".Translate())</h6>
+            <p>@vehicle?.VehModel</p>
+        </div>
+        <div class="with-underline">
+            <h6>@("OfferModel.VehicleRegNumber".Translate())</h6>
+            <p>@vehicle?.VehicleRegNumber</p>
+        </div>
+    }
+
+
+
+    <div class="sign-area">
+
+        <div class="sign-title-container">
+            <h6 class="sign-title">@LocalizationExtension.Translate("CardComponent.OnlyInsured")</h6>
+            <span>@DealModel?.Client?.FullConcatName</span>
+        </div>
+
+        <div class="sign-container">
+            <span>@LocalizationExtension.Translate("CardComponent.OnlyInsured")</span>
+            <div class="sign-line"></div>
+            <span>@LocalizationExtension.Translate("CardComponent.Signature")</span>
+        </div>
+    </div>
+
+    @if (DealModel?.Client?.ClientType ==  ClientType.Company)
+    {
+        <table class="table table-striped" style="transform-origin:left top; transform:scale(0.652);}">
+            <thead>
+                <tr>
+                    <th style="color:orange">@("OfferModel.CountOfInsuredSeats".Translate())</th>
+                    <th style="color:orange">@("OfferModel.MarketValueOfVehicle".Translate())</th>
+                    <th style="color:orange">@("OfferModel.EngineCapacity".Translate())</th>
+                    <th style="color:orange">@("OfferModel.ManufactureYear".Translate())</th>
+                    <th style="color:orange">@("OfferModel.NumberOfSeats".Translate())</th>
+                    <th style="color:orange">@("OfferModel.OfficialServiceRequired".Translate())</th>
+                    <th style="color:orange">@("DropDown.PersonalAccidentInsuranceOfDriverAndPassengerItemsOid".Translate())</th>
+                    <th style="color:orange">@("DropDown.PropertyLiabilityInsuranceItemsOid".Translate())</th>
+                    <th style="color:orange">@("DropDown.SelectedVehicleUsagePurposeOid".Translate())</th>
+                    <th style="color:orange">@("DropDown.VehBrandOid".Translate())</th>
+                    <th style="color:orange">@("DropDown.VehModelOid".Translate())</th>
+                    <th style="color:orange">@("OfferModel.VehicleRegNumber".Translate())</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Vehicles != null && Vehicles?.Count > 0)
+                {
+                    @foreach (var vehicle in Vehicles)
+                    {
+                        <tr>
+                            <td>@vehicle?.CountOfInsuredSeats</td>
+                            <td>@vehicle?.MarketValueOfVehicle</td>
+                            <td>@vehicle?.EngineCapacity</td>
+                            <td>@vehicle?.ManufactureYear</td>
+                            <td>@vehicle?.NumberOfSeats</td>
+                            <td>@vehicle?.OfficialServiceRequired</td>
+                            @if (!string.IsNullOrEmpty(vehicle?.PersonalAccidentInsuranceOfDriverAndPassengerItems))
+                            {
+                                <td>@vehicle?.PersonalAccidentInsuranceOfDriverAndPassengerItems</td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="checkbox-container">
+                                        <div class="checkbox "></div>
+                                        <span>@("OfferModel.No".Translate())</span>
+                                    </div>
+                                </td>
+                            }
+                            @if (!string.IsNullOrEmpty(vehicle?.PropertyLiabilityInsuranceItems))
+                            {
+                                <td>@vehicle?.PropertyLiabilityInsuranceItems</td>
+                            }
+                            else
+                            {
+                                <td><p class="checker-item checked">@("OfferModel.No".Translate())</p></td>
+                            }
+                            <td>@vehicle?.SelectedVehicleUsagePurpose</td>
+                            <td>@vehicle?.VehBrand</td>
+                            <td>@vehicle?.VehModel</td>
+                            <td>@vehicle?.VehicleRegNumber</td>
+                        </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    }
+
+
+</div>
+

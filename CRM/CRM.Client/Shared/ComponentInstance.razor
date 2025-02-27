@@ -1,0 +1,25 @@
+﻿<CascadingValue Value="this">
+
+    @Content
+
+    @code{
+
+        [Parameter] public RenderFragment Content { get; set; }
+
+        [Parameter] public Guid Id { get; set; }
+
+    }
+</CascadingValue>
+
+@code
+{
+    [CascadingParameter] private SlidePanelTemplate BaseCompo { get; set; }
+
+    /// <summary>
+    /// Closes the modal and returns a cancelled ModalResult.
+    /// </summary>
+    public async Task Close()
+    {
+        await BaseCompo.CloseInstance(Id);
+    }
+}

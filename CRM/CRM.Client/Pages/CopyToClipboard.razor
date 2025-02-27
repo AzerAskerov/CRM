@@ -1,0 +1,43 @@
+﻿@inject IJSRuntime JSRuntime
+
+<style>
+    #clipboard-copied-icon {
+        visibility: hidden;
+        border: none;
+    }
+
+    #clipboard-check-icon {
+        cursor: pointer;
+        border: none;
+    }
+
+    #clipboard-link{
+        background-color:grey;
+        padding:5px;
+        border-radius:10px;
+    }
+
+    #clipboard-btn, .form-inline {
+        border: none;
+    }
+</style>
+
+<div class="form-inline">
+    <p id="clipboard-link">@TextToBeCopied</p>
+    @*@("CopyToClipboard.CopyLink".Translate() ?? "Karta linki kopyala")*@
+<button id="clipboard-btn" type="button" @onclick="CopyTextToClipboard">
+    <img alt="clipboard-copied-icon" id="clipboard-copied-icon" src="/image/icons/check.svg" />
+    <img alt="clipboard-check-icon" id="clipboard-check-icon" src="/image/icons/clipboard.svg" />
+</button>
+</div>
+
+@code {
+    [Parameter] public string TextToBeCopied { get; set; }
+
+    //private string Text = /*"CopyToClipboard.Copy".Translate() ?? " Kopyalandı!";*/
+
+    private async Task CopyTextToClipboard()
+    {
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", TextToBeCopied/*, Text*/);
+    }
+}

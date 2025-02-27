@@ -1,0 +1,40 @@
+﻿@inherits BaseComponent
+
+<br />
+<div class="container-fluid" style="width: 1110px;">
+
+
+    <div class="row">
+
+        <div class="col-sm-3 form-group">
+            <h6>@("MedServices.razor.UsedClinicCount".Translate()) <span class="badge badge-secondary">@UserClinicCount</span></h6>
+        </div>
+
+        <div class="col-sm-4 form-group">
+            <h6>@("MedServices.razor.LastServiceUsedDate".Translate()) <span class="badge badge-secondary">@LastServiceDate</span></h6>
+        </div>
+    </div>
+
+    <br />
+
+    @if (RoleModel.IsOwnClient || RoleModel.Full)
+    {
+        <Indicator Context="medservices">
+            <Grid Items="@services" class="table">
+
+                <GridColumn TRowData="MedicineModel" Expression="c => c.PolicyNumber"></GridColumn>
+                <GridColumn TRowData="MedicineModel" Expression="c => c.ClinicName"></GridColumn>
+                <GridColumn TRowData="MedicineModel" Expression="c => c.CompanyName"></GridColumn>
+                <GridColumn TRowData="MedicineModel" Expression="c => c.ServiceDate"></GridColumn>
+                <GridColumn TRowData="MedicineModel" Expression="c => c.ServiceDepartment"></GridColumn>
+
+            </Grid>
+        </Indicator>
+        <div class="row">
+            <div class="col">
+                <CustomPagination MetaData="MetaData" Spread="3" SelectedPage="@SelectedPage" />
+            </div>
+        </div>
+    }
+
+</div>

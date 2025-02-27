@@ -1,0 +1,118 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CRM.Operation.Models;
+using CRM.Operation.Models.DealOfferModels;
+using CRM.Operation.Models.RequestModels;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Newtonsoft.Json;
+using Zircon.Core;
+
+namespace CRM.Client.Shared.Components.OfferFormComponents
+{
+    public partial class CarAndEquipmentInsuranceOfferComponent
+    {
+        [Parameter]
+        public CarAndEquipmentInsuranceOfferModel OfferModel { get; set; }
+        [Parameter]
+        public DealModel DealModel { get; set; }
+        public void AddVehicleItem()
+        {
+            OfferModel.Vehicles.Add(new InsuredVehicleModel());
+        }
+
+        protected void RemoveVehicleItem(InsuredVehicleModel item)
+        {
+            OfferModel.Vehicles.Remove(item);
+        }
+
+
+        public EditContext EditContext { get; set; }
+        [Parameter]
+        public EventCallback<EditContext> ModelSet { get; set; }
+
+        [Parameter]
+        public bool ReadOnly { get; set; }
+          protected InsuredVehicleModel vehicleModel;
+
+        public List<SourceItem> VehBrands { get; set; }
+        public List<SourceItem> VehModels { get; set; }
+        public List<SourceItem> PersonalAccidentInsuranceOfDriverAndPassengerItems { get; set; }
+        public List<SourceItem> PropertyLiabilityInsuranceItems { get; set; }
+        public List<SourceItem> SelectedVehicleUsagePurposes { get; set; }
+        protected override async Task OnInitializedAsync()
+        {
+            OfferModel ??= new CarAndEquipmentInsuranceOfferModel();
+            EditContext = new EditContext(OfferModel);
+            var result = await State.GetCarNEquipVehicles(OfferModel.DealGuid);
+
+            OfferModel.Vehicles = (result?.Model != null && result.Model.Count > 0) ? result.Model : new System.Collections.Generic.List<InsuredVehicleModel>() { new InsuredVehicleModel() };
+
+
+            var stateVehBrand = await State.Sourceloader(new SourceLoaderModel()
+            {
+                ParentPropertyNamespace = typeof(VehicleInsuranceOfferModel).AssemblyQualifiedName,
+                PropertyName = nameof(OfferModel.VehBrandOid),
+                ParentAsJson = JsonConvert.SerializeObject(OfferModel)
+            });
+
+            var stateSelectedVehicleUsagePurposes = await State.Sourceloader(new SourceLoaderModel()
+            {
+                ParentPropertyNamespace = typeof(VehicleInsuranceOfferModel).AssemblyQualifiedName,
+                PropertyName = nameof(OfferModel.SelectedVehicleUsagePurposeOid),
+                ParentAsJson = JsonConvert.SerializeObject(OfferModel)
+            });
+
+            var stateVehModel = await State.Sourceloader(new SourceLoaderModel()
+            {
+                ParentPropertyNamespace = typeof(VehicleInsuranceOfferModel).AssemblyQualifiedName,
+                PropertyName = nameof(OfferModel.VehModelOid),
+                ParentAsJson = JsonConvert.SerializeObject(OfferModel)
+            });
+
+           
+            VehBrands = stateVehBrand.Model;
+            SelectedVehicleUsagePurposes = stateSelectedVehicleUsagePurposes.Model;
+
+
+            foreach (var item in OfferModel.Vehicles)
+            {
+                if (!string.IsNullOrEmpty(item.VehModelOid))
+                {
+                    await OnBrandValueChanged(item.VehBrandOid, item);
+                }
+            }
+
+            await ModelSet.InvokeAsync(EditContext);
+            await base.OnInitializedAsync();
+        }
+        private DropDownComponent<int?> _modelDropDownComponent;
+
+
+        public async Task OnBrandValueChanged(string value, InsuredVehicleModel model)
+        {
+            model.VehBrandOid = value;
+
+            var stateVehModel = await State.Sourceloader(new SourceLoaderModel()
+            {
+                ParentPropertyNamespace = typeof(VehicleInsuranceOfferModel).AssemblyQualifiedName,
+                PropertyName = nameof(model.VehModelOid),
+                ParentAsJson = JsonConvert.SerializeObject(model)
+            });
+
+            model.VehModels = stateVehModel.Model;
+
+        }
+
+        private void BeneficiarySelected(ClientContract clientContract)
+        {
+            OfferModel.Beneficiary = clientContract;
+        }
+
+        private async Task BrandSelected()
+        {
+            await _modelDropDownComponent.LoadItems();
+        }
+    }
+}

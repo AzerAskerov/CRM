@@ -1,0 +1,19 @@
+﻿@inherits BaseComponent
+@using CRM.Operation.Models.DealOfferModels
+
+<br />
+
+<div class="container-fluid" style="width:1110px;">
+    <Indicator Context="deals">
+        <Grid Items="@deals" class="table">
+            @* <GridColumnCommand Actions="actions"></GridColumnCommand> *@
+            <GridColumn TRowData="DealModel" Expression="c => c.DealNumber"></GridColumn>
+            <GridColumn TRowData="DealModel" Expression="c => c.CreatedTimeStamp"></GridColumn>
+        </Grid>
+    </Indicator>
+    <div class="row">
+        <div class="col">
+            <CustomPagination MetaData="MetaData" Spread="200" SelectedPage="@SelectedPage"/>
+        </div>
+    </div>
+</div>

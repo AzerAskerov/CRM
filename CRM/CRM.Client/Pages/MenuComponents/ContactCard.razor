@@ -1,0 +1,238 @@
+﻿@inherits BaseComponent
+@using CRM.Operation.Models.RequestModels
+@using Ababil.Components.Core
+@using CRM.Operation.SourceLoaders
+
+<SlidePanelCommonContent HeaderText="@("Client.Create.ContractCard".Translate())">
+    <Body>
+        <EditForm Context="EditForm" Model="@ClientContractModel" OnValidSubmit="@(()=>SubmitClientAsync(ClientContractModel))">
+            <ObjectGraphDataAnnotationsValidator />
+
+            <div class="row col-lg-12">
+                <div class="popup-frame-body-container">
+
+                    <CardComponent Header="@("Client.ClientInfo".Translate())" HeaderIconClass="">
+
+                        <MatChipSet>
+                            <div>
+                                <DropDownComponent ItemExpression="@(() => ClientContractModel.Tag)" Parent="@ClientContractModel" OnSelected="OnAddOption"></DropDownComponent>
+                            </div>
+                            <div class="col">
+                                @foreach (var option in ClientContractModel.Tags)
+                                {
+                                    <div class="mdc-chip">
+                                        <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@option.Name></MatChip>
+                                        <a class="mdc-chip" @onclick="@(() => OnTrailingIconClick(option.Id))">ClientContractModel.FullName
+                                            <span class="material-icons">delete_outline</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </MatChipSet>
+                        <br />
+                        <MatDivider Padded="true"></MatDivider>
+                        <br />
+
+
+                        <div class="row">
+                            <div class="col-3 form-group">
+                                <MatTextField @bind-Value="@ClientContractModel.FirstName" Label="@("Client.Name".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.LastName" Label="@("Client.LastName".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.FatherName" Label="@("Client.FatherName".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.FullName" Label="@("Client.FullName".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.PinNumber" Label="@("Client.PinNumber".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-3 form-group">
+                                <DatePickerFor Class="form-control" @bind-Value="@ClientContractModel.BirthDate" Id="ClientContractModel.BirthDate" PlaceHolder="@("Client.BirthDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())">
+                                </DatePickerFor>
+                            </div>
+                            <div class="col-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.PositionCustom" Label="@("DropDown.Position".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.MonthlyIncome" Label="@("Client.MonthlyIncome".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                        </div>
+
+                    </CardComponent>
+
+                    @*Look Down*@
+                    <br />
+
+                    @*Comment*@
+                    <CardComponent Header="@("Client.ClientComment".Translate())" HeaderIconClass="">
+                        <div class="row d-flex flex-column">
+                            @if (ClientContractModel.ClientComments != null && ClientContractModel.ClientComments.Count > 0)
+                            {
+                                @foreach (var comment in ClientContractModel.ClientComments)
+                                {
+                                    <div class="row">
+                                        <div class="col-3 form-group">
+                                            <InputText placeholder="@("Client.ClientComment".Translate())" Id="Client.ClientComment"
+                                                       Class="form-control" @bind-Value="comment.Text"></InputText>
+                                            <ValidationMessage For="@(() => comment.Text)" />
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col mr-2">
+                                                <a href="" class="btn btn-outline-danger" @onclick="@(()=>RemoveCommentItem(comment))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            <div class="col-3 pl-0">
+                                <a href="" class="btn btn-outline-primary" @onclick="@AddCommentItem" @onclick:preventDefault>@("Client.AddClientComment".Translate())</a>
+                            </div>
+                        </div>
+                    </CardComponent>
+
+                    <br />
+
+                    <CardComponent Header="@("Client.ContactInfo".Translate())" HeaderIconClass="">
+
+                        @foreach (var contactItem in ClientContractModel.ContactsInfo)
+                        {
+                            <div class="row">
+                                <div class="col-3">
+                                    <DropDownComponent ItemExpression="@(() => contactItem.Type)" Parent="@contactItem"></DropDownComponent>
+                                    <ValidationMessage For="@(() => contactItem.Type)" />
+                                </div>
+                                <div class="col-3">
+                                    <MatTextField @bind-Value="contactItem.Value" Label="@("Client.ContactValue".Translate())" Outlined="true"></MatTextField>
+                                    <ValidationMessage For="@(() => contactItem.Value)" />
+                                </div>
+                                @foreach (var comment in contactItem.ContactComments)
+                                {
+                                    <div class="col-3">
+                                        <InputText placeholder="@("Client.ContactComment".Translate())" Id="Client.ContactComment"
+                                                   Class="form-control" @bind-Value="comment.Text"></InputText>
+                                        <ValidationMessage For="@(() => comment.Text)" />
+                                    </div>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col my-2">
+                                    <a href="" class="btn btn-outline-danger" @onclick="@(()=>RemoveContactItem(contactItem))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                                </div>
+                            </div>
+                        }
+                        <div class="col pl-0">
+                            <a href="" class="btn btn-outline-primary" @onclick="@AddContactItem" @onclick:preventDefault>@("Client.ContactInfo.AddContact".Translate())</a>
+                        </div>
+                    </CardComponent>
+
+                    <br />
+
+                    <CardComponent Header="@("Client.Address".Translate())" HeaderIconClass="">
+                        <div class="row">
+                            <div class="col-sm-3 form-group">
+                                <DropDownComponent OnSelected="(()=>SelectedCountryID = ClientContractModel.Address.CountryId.Value)" ItemExpression="@(() => ClientContractModel.Address.CountryId)" Parent="@ClientContractModel.Address"></DropDownComponent>
+                                <ValidationMessage For="@(() => ClientContractModel.Address.CountryId)" />
+                            </div>
+                            @if (SelectedCountryID == (int)CRM.Operation.Enums.CountryCodeContainer.DefaultCountryCode1 ||
+                            SelectedCountryID == (int)CRM.Operation.Enums.CountryCodeContainer.DefaultCountryCode2)
+                            {
+                                <div class="col-sm-3 form-group">
+                                    <DropDownComponent ItemExpression="@(() => ClientContractModel.Address.RegOrCityId)" Parent="@ClientContractModel.Address"></DropDownComponent>
+                                    <ValidationMessage For="@(() => ClientContractModel.Address.RegOrCityId)" />
+                                </div>
+                            }
+                            <div class="col-sm-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.Address.DistrictOrStreet" Label="@("Client.Address.DistrictOrStreet".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <MatTextField @bind-Value="ClientContractModel.Address.AdditionalInfo" Label="@("Client.Address.AdditionalInfo".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                        </div>
+                    </CardComponent>
+
+                    <br />
+
+                    <CardComponent Header="@("Client.Document".Translate())" HeaderIconClass="">
+
+                        @foreach (var documentItem in ClientContractModel.Documents)
+                        {
+                            <div class="row">
+                                <div class="col-3">
+                                    <DropDownComponent ItemExpression="@(() => documentItem.DocumentType)" Parent="@documentItem"></DropDownComponent>
+                                    <ValidationMessage For="@(() => documentItem.DocumentType)" />
+                                </div>
+                                <div class="col-3">
+                                    <MatTextField @bind-Value="documentItem.DocumentNumber" Label="@("Client.DocumentNumber".Translate())" Outlined="true"></MatTextField>
+                                    <ValidationMessage For="@(() => documentItem.DocumentNumber)" />
+                                </div>
+                                <div class="col-3">
+                                    <DatePickerFor Class="form-control" @bind-Value="@documentItem.DocumentExpireDate" Id="Client.DocumentExpireDate" PlaceHolder="@("Client.DocumentExpireDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())"></DatePickerFor>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col my-2">
+                                    <a href="" class="btn btn-outline-danger" @onclick="@(()=>RemoveDocumentItem(documentItem))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                                </div>
+                            </div>
+                        }
+                        <div class="col pl-0">
+                            <a href="" class="btn btn-outline-primary" @onclick="@AddDocumentItem" @onclick:preventDefault>@("Client.AddDocument".Translate())</a>
+                        </div>
+                    </CardComponent>
+
+                    <br />
+
+                    <CardComponent Header="@("Client.Relation".Translate())" HeaderIconClass="">
+                        @foreach (var relationItem in ClientContractModel.Relations)
+                        {
+                            <div class="row">
+                                <div class="col-3">
+                                    <DropDownComponent ItemExpression="@(() => relationItem.RelationType)" Parent="@relationItem"></DropDownComponent>
+                                    <ValidationMessage For="@(() => relationItem.RelationType)" />
+                                </div>
+                                <div class="col-3">
+                                    <CommonSearch @bind-ReleatedClient="@(relationItem.ClientINN)" Place="ContactCard"></CommonSearch>
+                                    <ValidationMessage For="@(() => relationItem.ClientINN)" />
+                                    @*<MatTextField @bind-Value="relationItem.ClientINN" Label="@("Client.RelationClientINN")" Outlined="true"></MatTextField>*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col my-2">
+                                    <a href="" class="btn btn-outline-danger" @onclick="@(()=>RemoveRelationItem(relationItem))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                                </div>
+                            </div>
+                        }
+                        <div class="col pl-0">
+                            <a href="" class="btn btn-outline-primary" @onclick="@AddRelationItem" @onclick:preventDefault>@("Client.AddRelation".Translate())</a>
+                        </div>
+                    </CardComponent>
+
+                    <br>
+                    <div class="row justify-content-center form-btn">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-outline-primary btn-block">@("Client.Create".Translate())</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </Body>
+</SlidePanelCommonContent>
+
+
+
+@code{
+    private void OnTrailingIconClick(int? chipID)
+    {
+        if (ClientContractModel.Tags.Any(x => x.Id == chipID))
+        {
+            ClientContractModel.Tags.Remove(ClientContractModel.Tags.FirstOrDefault(x => x.Id == chipID));
+        }
+    }
+}

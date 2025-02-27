@@ -1,0 +1,7 @@
+﻿@inherits MainMenuLinkBase
+
+
+    <a href="@Href" class="@(IsActive() ? ActiveClass : "") d-flex align-items-center">
+        @ChildContent
+    </a>
+

@@ -1,0 +1,54 @@
+﻿<div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+    <div class="slide-panel-container">
+        <div class="row sticky-top">
+            <div class="popup-frame-header position-relative">
+                <h4 class="text-center text-light" style="line-height: 80px; color: #fff;">@HeaderText</h4>
+                <div class="slide-panel-label h-100 d-flex align-items-center justify-content-center" @onclick="@(()=>Close())">
+
+                    <div class="slide-panel-close">
+                        <div class="slide-panel-close-btn-inner h-100 d-flex align-items-center justify-content-center">
+
+                            <i class="fas fa-times close-slide-panel-icon" style="font-size: 30px;"></i>
+                        </div>
+                    </div>
+                    @*<span class="slide-panel-label-text">@("Close".Translate())</span>*@
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="popup-frame-body-container">
+                <div class="popup-frame-body ">
+                    <div class="popup-frame-card-container py-2 my-4">
+                        <div class="popup-frame-card-content">
+                            <form class="contact-form" action="">
+
+                                <div class="contact-form-content">
+                                    @Body
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    [CascadingParameter] private ComponentInstance BaseCompo { get; set; }
+
+    [Parameter] public RenderFragment Body { get; set; }
+
+    [Parameter] public string HeaderText { get; set; }
+
+    private async Task Close()
+    {
+        await BaseCompo.Close();
+    }
+}

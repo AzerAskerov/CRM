@@ -1,0 +1,384 @@
+﻿@inherits BaseComponent
+
+<style>
+    .mdc-text-field {
+        width: 100%;
+    }
+</style>
+
+<EditForm Context="UpdateCompanyForm" Model="CompanyListItemModel" OnValidSubmit="@(()=>SubmitClientAsync(CompanyListItemModel))">
+    <MatAccordion>
+        <MatExpansionPanel Expanded="true" ExpandedChanged="ClientInfoExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.ClientInfo".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+
+                    <MatChipSet>
+                        <div class="row">
+                            <div hidden="@(!IsEdit)">
+                                <DropDownComponent ItemExpression="@(() => CompanyListItemModel.Tag)" Parent="@CompanyListItemModel" OnSelected="OnAddOption" ReadOnly="@(!IsEdit)"></DropDownComponent>
+                            </div>
+                            <div>
+                                @foreach (var option in CompanyListItemModel.Tags)
+                            {
+                                <div class="mdc-chip">
+                                    <MatChip LeadingIcon="star_border" IsRemovable="true" Label=@option.Name></MatChip>
+                                    <a class="mdc-chip" @onclick="@(() => OnTrailingIconClick(option.Id))" hidden="@(!IsEdit)">
+                                        <span class="material-icons">delete_outline</span>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </MatChipSet>
+
+                <div class="row my-3">
+                    <div class="col-12 form-group">
+                        <div class="border-bottom @NonEditable">
+                            <label>
+                                @("Client.Name".Translate()): <strong>@CompanyListItemModel.CompanyName</strong>
+                            </label>
+                        </div><br>
+                        <div class="border-bottom @NonEditable">
+                            <label>
+                                @("Client.Inn".Translate()): <strong>@CompanyListItemModel.INN</strong>
+                            </label>
+                        </div>
+                        <div class="@Editable">
+                            <MatTextField @bind-Value="@CompanyListItemModel.CompanyName" Label="@("Client.Name".Translate())" Outlined="true" class="w-100"></MatTextField>
+                        </div>
+                    </div>
+                </div>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <br />
+        <MatExpansionPanel ExpandedChanged="CuratorProductsExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.CuratorProduct".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <div class="row">
+                        <div>
+                            @foreach (var p in InforceProductList)
+                        {
+                            <span class="badge badge-success">@p.ProductName</span>
+                        }
+
+                        @foreach (var f in InOtherStatusProductList)
+                        {
+                            <span class="badge badge-warning">@f.ProductName</span>
+                        }
+
+                        <br />
+                        <br />
+                    </div>
+                    <br />
+                    <br />
+                    @if (CuratorProducts != null && CuratorProducts.Count > 0)
+
+                    {
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>@("Client.CuratorProduct.CuratorFullName".Translate())</th>
+                                    <th>@("Client.CuratorProduct.ProductName".Translate())</th>
+                                    @*<th>@("Client.CuratorProduct.StartDate".Translate())</th>
+                                <th>@("Client.CuratorProduct.EndDate".Translate())</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in CuratorProducts.OrderByDescending(p => p.EndDate))
+                                {
+                                    <tr>
+                                        <td>@product.CuratorFullName</td>
+                                        <td>@product.ProductName</td>
+                                        @*<td>@product.StartDate</td>
+                                <td>@product.EndDate</td>*@
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+
+        @*Comments*@
+        <MatExpansionPanel ExpandedChanged="CommentInfoExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.ClientComment".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+
+                    <div class="d-flex flex-column" style="max-height:100vh; gap:10px; overflow-y:auto">
+                        @if (CompanyListItemModel?.ClientComments != null)
+                    {
+                        @foreach (var comment in CompanyListItemModel?.ClientComments.OrderByDescending(c => c.CreateTimeStamp))
+                        {
+                            <div class="col-12">
+
+                                <div class="d-flex flex-column p-1" style="gap:10px; border:1px solid black;">
+                                    <span>
+                                        <b>
+                                            @comment.Text
+                                        </b>
+                                    </span>
+                                    <span>
+                                        <i> @(comment.FullName)</i>
+                                        <i>@(comment.CreateTimeStamp?.ToShortDateString())</i>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+                    @foreach (var item in CompanyComments)
+                    {
+                        <div>
+                            <MatTextField class="col-sm-12" @bind-Value="item.Text" Label="@("Client.ClientComment".Translate())" Outlined="true"></MatTextField>
+                        </div>
+                        <div class="col-sm-3 form-group" hidden="@(!IsEdit)">
+                            <a class="btn btn-outline-danger" href="" @onclick="@(()=>RemoveCommentItem(item))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                        </div>
+                    }
+                    <div class="col-sm-3 form-group" hidden="@(!IsEdit)">
+                        <a href="" @onclick="@AddClientCommentItem" @onclick:preventDefault>@("Client.AddCompanyComment".Translate())</a>
+                    </div>
+                </div>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <MatExpansionPanel ExpandedChanged="ContactInfoExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.ContactInfo".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    <div hidden="@(RoleModel!=null && (!(RoleModel.IsOwnClient || RoleModel.Full)))">
+                        @foreach (var contactItem in CompanyListItemModel.ContactsInfo)
+                    {
+                        <div class="row">
+                            <div class="col-4 form-group">
+                                <DropDownComponent ItemExpression="@(() => contactItem.Type)" Parent="@contactItem" ReadOnly="@(!string.IsNullOrEmpty(contactItem.Value))"></DropDownComponent>
+                            </div>
+                            <div class="col-8 form-group">
+                                @if (string.IsNullOrEmpty(contactItem.Value))
+                                {
+                                    <div>
+                                        <MatTextField @bind-Value="contactItem.Value" Label="@("Client.ContactValue".Translate())" Outlined="true"></MatTextField>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="border-bottom">
+                                        <span>
+                                            @("Client.ContactValue".Translate()): <strong>@contactItem.Value</strong>
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                            @foreach (var comment in contactItem.ContactComments)
+                            {
+                                <div class="col-sm-4 form-group">
+                                    <InputText placeholder="@("Client.ContactComment".Translate())" Id="Client.ContactComment" class="form-control" @bind-Value="comment.Text"></InputText>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <MatExpansionPanel ExpandedChanged="CallsExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.Calls".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    @if (CompanyListItemModel.ContactsInfo.Any(x => x.Calls.Any()))
+                {
+                    @foreach (var contactItem in CompanyListItemModel.ContactsInfo)
+                    {
+                        <div class="row">
+                            <div class="col-sm-8 form-group ">
+                                <MatTextField @bind-Value="contactItem.Value" Label="@("Client.ClientNumber".Translate())" Outlined="true" ReadOnly="true"></MatTextField>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @foreach (var call in contactItem.Calls)
+                            {
+                                <div class="col-sm-4 form-group ">
+                                    <MatTextField Label="@("Call.ResponsibleNumber".Translate())" @bind-Value="call.ResponsibleNumber" ReadOnly="true" Outlined="true"></MatTextField>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <MatTextField Label="@("Call.Direction".Translate())" @bind-Value="call.Direction" ReadOnly="true" Outlined="true"></MatTextField>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <MatTextField Label="@("Call.CallTimestamp".Translate())" @bind-Value="call.CallTimestamp" ReadOnly="true" Outlined="true"></MatTextField>
+                                </div>
+                            }
+                        </div>
+                        <MatDivider Padded="true"></MatDivider>
+                        <br />
+                        @foreach (var comment in contactItem.ContactComments)
+                        {
+                            <div class="col-sm-4 form-group">
+                                <InputText placeholder="@("Client.ContactComment".Translate())" Id="Client.ContactComment" class="form-control" @bind-Value="comment.Text"></InputText>
+                            </div>
+                        }
+                    }
+                }
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <MatExpansionPanel ExpandedChanged="AddressExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.Address".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    @if (AddressOpenState && CompanyListItemModel.Address != null)
+                {
+                    <div class="row">
+                        <div class="col-sm-3 form-group">
+                            <DropDownComponent OnSelected="(()=>SelectedCountryID = CompanyListItemModel.Address.CountryId.Value)" ItemExpression="@(() => CompanyListItemModel.Address.CountryId)" Parent="@CompanyListItemModel.Address" ReadOnly="@(!IsEdit)"></DropDownComponent>
+                        </div>
+
+                        @if (CompanyListItemModel.Address.CountryId != null &&
+                       (CompanyListItemModel.Address.CountryId == (int)CRM.Operation.Enums.CountryCodeContainer.DefaultCountryCode1 ||
+                       CompanyListItemModel.Address.CountryId == (int)CRM.Operation.Enums.CountryCodeContainer.DefaultCountryCode2))
+                        {
+                            <div class="col-sm-3 form-group">
+                                <DropDownComponent ItemExpression="@(() => CompanyListItemModel.Address.RegOrCityId)" Parent="@CompanyListItemModel.Address" ReadOnly="@(!IsEdit)"></DropDownComponent>
+                            </div>
+                        }
+
+                        <div class="col-sm-3 form-group">
+                            <div class="border-bottom @NonEditable">
+                                <label>
+                                    @("Client.Address.DistrictOrStreet".Translate()): <strong>@CompanyListItemModel.Address.DistrictOrStreet</strong>
+                                </label>
+                            </div>
+                            <div class="@Editable">
+                                <MatTextField @bind-Value="CompanyListItemModel.Address.DistrictOrStreet" Label="@("Client.Address.DistrictOrStreet".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <div class="border-bottom @NonEditable">
+                                <label>
+                                    @("Client.Address.AdditionalInfo".Translate()): <strong>@CompanyListItemModel.Address.AdditionalInfo</strong>
+                                </label>
+                            </div>
+                            <div class="@Editable">
+                                <MatTextField @bind-Value="CompanyListItemModel.Address.AdditionalInfo" Label="@("Client.Address.AdditionalInfo".Translate())" Outlined="true" ReadOnly="@(!IsEdit)"></MatTextField>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <MatExpansionPanel ExpandedChanged="DocumentExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.Document".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    @foreach (var documentItem in CompanyListItemModel.Documents)
+                {
+                    <div class="row">
+                        <div class="col-4 form-group">
+                            <DropDownComponent ItemExpression="@(() => documentItem.DocumentType)" Parent="@documentItem" ReadOnly="@(!IsEdit)"></DropDownComponent>
+                        </div>
+                        <div class="col-4 form-group">
+                            <div class="border-bottom doc-num @NonEditable">
+                                <MatTooltip Tooltip="@documentItem.DocumentNumber" Position="@MatTooltipPosition.Top">
+                                    <label>
+                                        @("Client.DocumentNumber".Translate()): <strong>@documentItem.DocumentNumber</strong>
+                                    </label>
+                                </MatTooltip>
+                            </div>
+                            <div class="@Editable">
+                                <MatTextField @bind-Value="documentItem.DocumentNumber" Label="@("Client.DocumentNumber".Translate())" Outlined="true"></MatTextField>
+                            </div>
+                        </div>
+                        <div class="col-4 form-group">
+                            <div class="border-bottom @NonEditable">
+                                <label>
+                                    @("Client.DocumentExpireDate".Translate()): <strong>@documentItem.DocumentExpireDate.ToString().Split(' ')[0]</strong>
+                                </label>
+                            </div>
+                            <div class="@Editable">
+                                <DatePickerFor Class="form-control" @bind-Value="@documentItem.DocumentExpireDate" Id="Client.DocumentExpireDate" PlaceHolder="@("Client.DocumentExpireDate".Translate())" CloseText=@("DatePickerFor.Close".Translate()) TodayText="@("DatePickerFor.Today".Translate())">
+                                </DatePickerFor>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-3 form-group" hidden="@(!IsEdit)">
+                    <a href="" @onclick="@AddDocumentItem" @onclick:preventDefault>@("Client.AddDocument".Translate())</a>
+                </div>
+
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+        <br />
+        <MatExpansionPanel ExpandedChanged="RelationExpand">
+            <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>@("Client.Relation".Translate())</MatExpansionPanelHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+                    @foreach (var relationItem in CompanyListItemModel.Relations)
+                {
+                    <div class="row">
+                        <div class="col-sm-3 form-group">
+                            <DropDownComponent ItemExpression="@(() => relationItem.RelationType)" Parent="@relationItem" ReadOnly="@(!IsEdit)"></DropDownComponent>
+                        </div>
+                        <div class="col-sm-9 form-group" hidden="@(!IsEdit || relationItem.ClientName != null)">
+                            <CommonSearch @bind-ReleatedClient="@(relationItem.ClientINN)" Place="ContactCard"></CommonSearch>
+                        </div>
+                        <div class="col-sm-9 form-group" hidden="@(IsEdit && relationItem.ClientName == null)">
+                            <MatTextField class="col-sm-9" @bind-Value="@relationItem.ClientName" Label="@("Client.ReleatedClientName".Translate())" Outlined="true" ReadOnly="@true"></MatTextField>
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-3 form-group" hidden="@(!IsEdit)">
+                    <a href="" @onclick="@AddRelationItem" @onclick:preventDefault>@("Client.AddRelation".Translate())</a>
+                </div>
+            </MatExpansionPanelDetails>
+        </MatExpansionPanel>
+
+        <br>
+        <div class="row py-2 justify-content-center form-btn">
+            <AuthorizeView Roles="CRMCanEdit">
+                <div class="col-4" hidden="@IsEdit">
+                    <button type="button" class="btn btn-outline-primary btn-block" @onclick="@(() => SwitchToEdit())">@("Client.Edit".Translate())</button>
+                </div>
+            </AuthorizeView>
+            <div class="col-4" hidden="@(!IsEdit)">
+                <button type="submit" class="btn btn-outline-primary btn-block">@("Client.Save".Translate())</button>
+            </div>
+        </div>
+    </MatAccordion>
+</EditForm>
+
+
+
+@code {
+    public string NonEditable = "d-block";
+    public string Editable = "d-none";
+
+    private void SwitchToEdit()
+    {
+        IsEdit = true;
+        NonEditable = "d-none";
+        Editable = "d-block";
+    }
+
+    private void OnTrailingIconClick(int? chipID)
+    {
+        if (CompanyListItemModel.Tags.Any(x => x.Id == chipID))
+        {
+            CompanyListItemModel.Tags.Remove(CompanyListItemModel.Tags.FirstOrDefault(x => x.Id == chipID));
+        }
+    }
+}

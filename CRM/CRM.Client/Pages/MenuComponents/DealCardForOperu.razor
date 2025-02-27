@@ -1,0 +1,134 @@
+﻿@using Zircon.Core.Extensions
+@using CRM.Data.Enums
+@using CRM.Operation.Localization
+@inherits BaseComponent
+
+<SlidePanelCommonContent HeaderText="@(LocalizationExtension.Translate("Deal"))">
+    <Body>
+        <EditForm EditContext="EditContext">
+            <DataAnnotationsValidator /><ValidationSummary />
+            <ObjectGraphDataAnnotationsValidator />
+            <CardComponent Header="@(LocalizationExtension.Translate("Deal.GeneralInfo"))" HeaderIconClass="">
+                <DealGeneralInfoComponent DealModel="@Model"></DealGeneralInfoComponent>
+            </CardComponent>
+            @if (Model.DealStatus.In(DealStatus.SurveySent, DealStatus.PendingUnderwriting))
+            {
+                if (Model.UnderwriterUser != null)
+                {
+                    <CardComponent Header="@(LocalizationExtension.Translate("Deal.Survey"))" HeaderIconClass="">
+                        @if (Model.SumInsured.HasValue && !string.IsNullOrEmpty(Model.SurveyContactInfo))
+                        {
+                            <div class="row">
+                                <div class="col-3 form-group">
+                                    <DropDownComponent ItemExpression="@(() => Model.Survey.SurveyerType)" Parent="Model.Survey" OnSelected="StateHasChanged" ReadOnly="@(!Model.DealStatus.In(DealStatus.PendingUnderwriting, DealStatus.SurveySent))"></DropDownComponent>
+                                    <ValidationMessage For="@(() => Model.Survey.SurveyerType)" />
+                                </div>
+                                <div class="col-3 form-group">
+                                    <div class="readonly-input">
+                                        <span>
+                                            <span>@(LocalizationExtension.Translate("SurveyStatus"))</span>
+                                            <strong>@Model.Survey.StatusAsString</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5>@(LocalizationExtension.Translate("DealCardForUnderwriter.SumInsuredOrClientPhoneNotSet"))</h5>
+                        }
+                    </CardComponent>
+                }
+                else
+                {
+                    <a onclick="document.getElementById('SelectUnderwriter').scrollIntoView({behavior:'smooth'})">@(LocalizationExtension.Translate("DealCardForUnderwriter.SelectUnderwriter"))</a>
+                }
+            }
+            @if (IsSurveyFilesSectionActive())
+            {
+                <div class="div">
+                    <CardComponent Header="@(LocalizationExtension.Translate("SurveyAttachment"))" HeaderIconClass="">
+                        <iframe src="@SurveyFilesIFrameUrl" width="100" frameborder="0"></iframe>
+                    </CardComponent>
+                </div>
+            }
+            <CardComponent Header="@(LocalizationExtension.Translate("OfferForm"))" HeaderIconClass="">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <span>
+                            <span>@(LocalizationExtension.Translate("DealModel.DealSubject"))</span>
+                            <strong>@Model.DealSubject</strong>
+                        </span>
+                    </div>
+                    <div class="col-sm-4 form-group readonly-dropdown">
+                        <DropDownComponent ItemExpression="@(() => Model.SelectedOfferType)" ReadOnly="true" Parent="Model" OnSelected="StateHasChanged"></DropDownComponent>
+                    </div>
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("OfferModel.SumInsured"))</span>
+                                <strong>@Model.SumInsured</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @CreateOfferFormComponent()
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("CardComponent.InsuredPerson"))" HeaderIconClass="">
+                <ClientSearchComponent ClientFromParameter="@Model.Client" ReadOnly="true"></ClientSearchComponent>
+                <ValidationMessage For="@(() => Model.Client)" />
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("DealMode.ClientPhoneNumber"))</span>
+                                <strong>@Model.ClientPhoneNumber</strong>
+                            </span>
+                        </div>
+                        <ValidationMessage For="@(() => Model.ClientPhoneNumber)" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-3 form-group">
+                        <div class="readonly-input">
+                            <span>
+                                <span>@(LocalizationExtension.Translate("DealMode.SurveyContactInfo"))</span>
+                                <strong>@Model.SurveyContactInfo</strong>
+                            </span>
+                        </div>
+                        <ValidationMessage For="@(() => Model.SurveyContactInfo)" />
+                    </div>
+                </div>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("LanguageSelection"))" HeaderIconClass="">
+                <div class="row">
+                    <div class="col-3 form-group readonly-dropdown">
+                        <DropDownComponent ItemExpression="@(() => Model.OfferLanguageOid)" Parent="Model" OnSelected="StateHasChanged" ReadOnly="true"></DropDownComponent>
+                    </div>
+                </div>
+            </CardComponent>
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("Attachment"))" HeaderIconClass="">
+                <iframe src="@FileUploadIFrameUrl" width="100%" frameborder="0" height="350px"></iframe>
+            </CardComponent>
+            <br />
+            <br />
+            <CardComponent Header="@(LocalizationExtension.Translate("DealDiscussion"))" HeaderIconClass="">
+                <DealDiscussionComponent DealDiscussionModel="@Model.DealDiscussionModel" ReadOnly="IsFormReadOnly()"></DealDiscussionComponent>
+            </CardComponent>
+            @if (Model.DealStatus.In(DealStatus.Offered, DealStatus.Agreed))
+            {
+                <CardComponent Header="@(LocalizationExtension.Translate("Offers"))" HeaderIconClass="">
+                    <OfferComponent DealModel="@Model" ReadOnly="true"></OfferComponent>
+                </CardComponent>
+            }
+            <div class="row pt-3 form-btn">
+                <div class="col-12 text-center">
+                    <button class="btn btn-outline-warning mr-4" @onclick="Print" disabled="@AnyButtonClicked">Print </button>
+                </div>
+            </div>
+        </EditForm>
+    </Body>
+</SlidePanelCommonContent>

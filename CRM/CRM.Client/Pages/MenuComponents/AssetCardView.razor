@@ -1,0 +1,19 @@
+﻿@inherits BaseComponent
+
+
+    <Indicator Context="assets">
+        <Grid Items="@Assets" class="table">
+            <GridColumn TRowData="AssetViewModel" Expression="c => c.AssetInfo"></GridColumn>
+            <GridColumn TRowData="AssetViewModel" Expression="c => c.AssetDescription"></GridColumn>
+        </Grid>
+    </Indicator>
+    @*<div class="row">
+        <div class="col">
+            <CustomPagination MetaData="MetaData" Spread="3" SelectedPage="@SelectedPage" />
+        </div>
+    </div>*@
+
+
+@code {
+
+}

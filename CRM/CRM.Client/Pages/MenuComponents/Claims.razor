@@ -1,0 +1,38 @@
+﻿@inherits BaseComponent
+
+<br />
+<div class="container-fluid" style="width: 1110px;">
+
+    
+        <div class="row">
+
+            <div class="col-sm-6 form-group">
+                <h6>@("Claims.razor.AccidentCount".Translate()) <span class="badge badge-secondary">@Model.AccidentCount</span></h6>
+            </div>
+
+            <div class="col-sm-6 form-group">
+                <h6>@("Claims.razor.NonAccidentDays".Translate()) <span class="badge badge-secondary">@Model.NonClaimDayCount</span></h6>
+            </div>
+
+        </div>
+
+        <br />
+
+        @if (RoleModel.IsOwnClient || RoleModel.Full)
+        {
+<Indicator Context="claims">
+    <Grid Items="@claims" class="table">
+        <GridColumn TRowData="ClaimListItemModel" Expression="c => c.PolicyNumber"></GridColumn>
+        <GridColumn TRowData="ClaimListItemModel" Expression="c => c.AppNumber"></GridColumn>
+        <GridColumn TRowData="ClaimListItemModel" Expression="c => c.Description"></GridColumn>
+        <GridColumn TRowData="ClaimListItemModel" Expression="c => c.AccidentDate"></GridColumn>
+    </Grid>
+</Indicator>
+            <div class="row">
+                <div class="col">
+                    <CustomPagination MetaData="MetaData" Spread="3" SelectedPage="@SelectedPage" />
+                </div>
+            </div>
+        }
+    
+    </div>

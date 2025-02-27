@@ -1,0 +1,95 @@
+﻿@using CRM.Data.Enums
+@inherits BaseComponent
+@foreach (var offerItem in DealModel.Offers)
+{
+    <div class="row">
+        <div class="col-3 form-group d-flex align-items-center">
+            @if (ReadOnly && DealModel.DealStatus == DealStatus.Offered && IsOperuUser() == false)
+            {
+                <RadioGroup Name="OfferSelect" @bind-Value="SelectedOfferNumber">
+                    <Radio Value="@(offerItem.OfferNumber)" TValue="string"></Radio>
+                </RadioGroup>
+            }
+            @if (offerItem.IsAgreed == true && IsOperuUser() == false)
+            {
+                <Badge Status="success" Text="" />
+            }
+            else
+            {
+                <Badge Status="error" Text="" />
+            }
+            <Text style="margin-right:20px;" Disabled="true">@($"{offerItem.OfferNumber.Last()}) {offerItem.OfferNumber}")</Text>
+            <Text style="margin-right:20px;"><b>Qeydlər:</b><br/>@offerItem.Notes</Text>
+            <Text style="margin-right:20px;"><b>Planlaşdırılan zərərlilik:</b><br/>@offerItem.PlannedMaliciousness</Text>
+        </div>
+        @* <div class="col-3 form-group readonly-dropdown"> *@
+        @*     <DropDownComponent ItemExpression="@(() => offerItem.OfferPeriodTypeOid)" Parent="@offerItem" OnSelected="StateHasChanged" ReadOnly="offerItem.IsReadOnly"/> *@
+        @*     <ValidationMessage For="@(() => offerItem.OfferPeriodTypeOid)"/> *@
+        @* </div> *@
+        @if (offerItem.OfferPeriodTypeOid == 2)
+        {
+            <div class="col-3 form-group">
+                <MatDatePicker @bind-Value="offerItem.StartDate" Label="@("Offer.StartDate".Translate())" Outlined="true" ReadOnly="offerItem.IsReadOnly"></MatDatePicker>
+                <ValidationMessage For="@(() => offerItem.StartDate)" />
+            </div>
+            <div class="col-3 form-group">
+                <MatDatePicker @bind-Value="@offerItem.ExpireDate" Label="@("Offer.ExpireDate".Translate())" Outlined="true" ReadOnly="offerItem.IsReadOnly"></MatDatePicker>
+                <ValidationMessage For="@(() => offerItem.ExpireDate)" />
+            </div>
+        }
+        @if (offerItem.IsReadOnly && !string.IsNullOrEmpty(offerItem.FileManagementToken))
+        {
+            <div class="col-3 form-group d-flex align-items-center">
+                <a href="@($"api/filemanagement/downloadattachmentviatoken?token={offerItem.FileManagementToken}")" target="_top" download="@(offerItem.OfferNumber)">
+                    @("OfferComponent.DownloadOfferAttachment".Translate())
+                </a>
+            </div>
+        }
+        else
+        {
+            if (IsOperuUser() == false)
+            {
+                <div class="col-1">
+                    <a href="" @onclick="@(() => RemoveOfferItem(offerItem))" @onclick:preventDefault>@("ContactCard.RemoveItem".Translate())</a>
+                </div>
+            }
+
+        }
+        <Text>@offerItem.CreatedDate</Text>
+    </div>
+    <div class="row">
+        @if (!offerItem.IsReadOnly && IsOperuUser() == false)
+        {
+            <div class="col">
+                <iframe id="fileUploadIframe" src="@offerItem.FileUploadIFrameUrl" class="col" scrolling="auto" frameborder="0" height="250px"></iframe>
+            </div>
+            <div class="col">
+                <TextArea placeholder="@("Offer.Notes".Translate())" cols="4" rows="5" @bind-Value="offerItem.Notes"></TextArea>
+            </div>
+            <div class="col">
+                <TextArea Disabled="offerItem.IsReadOnly" placeholder="@("Offer.PlannedMaliciousness".Translate())" cols="4" rows="5" @bind-Value="offerItem.PlannedMaliciousness"></TextArea>
+            </div>
+        }
+
+
+    </div>
+    if (DealModel.Offers.Last() != offerItem)
+    {
+        <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+    }
+}
+@if (IsAddOfferBtnActive())
+{
+    <div class="col-sm-3 form-group">
+        <a href="" @onclick="@AddOfferItem" @onclick:preventDefault>@("Deals.Add".Translate())</a>
+    </div>
+}
+
+<div class="row">
+    @if (IsSubmitSelectedOfferBtnActive())
+    {
+        <div class="col-12">
+            <button class="btn btn-primary" @onclick="SubmitSelectedOffer">@(LocalizationExtension.Translate("Button.SubmitSelectedOffer"))</button>
+        </div>
+    }
+</div>

@@ -1,0 +1,19 @@
+﻿@using Zircon.Core.OperationModel
+@using System.Reflection
+@using Zircon.Core
+
+<a class="dropdown-item" Item="@Item" @onclick="e=> Dropdown.HandleSelect(Item, ChildContent, PropertyInfo, Parent)">@ChildContent(Item)</a>
+
+@code {
+    [CascadingParameter(Name = "Dropdown")]
+    public DropDown Dropdown { get; set; }
+
+    [Parameter]
+    public ISourceItem Item { get; set; }
+    [Parameter]
+    public RenderFragment<ISourceItem> ChildContent { get; set; }
+    [Parameter]
+    public PropertyInfo PropertyInfo { get; set; }
+    [Parameter]
+    public IModel Parent { get; set; } 
+}

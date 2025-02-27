@@ -1,0 +1,280 @@
+﻿@inherits BaseComponent
+@using CRM.Data.Enums;
+<div id="print">
+    <h1 class="general-title">@OfferTypeEnum.ProductLiabilityInsurance.ToString().Translate()</h1>
+    <div class="with-underline">
+        <h6> @LocalizationExtension.Translate("CardComponent.OnlyInsured")</h6>
+        <p>@DealModel?.Client?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6>
+            @("OfferModel.PinOrTin".Translate())
+        </h6>
+        @if (DealModel?.Client?.ClientType == ClientType.Company)
+        {
+            <p> @DealModel?.Client?.Documents?.FirstOrDefault(x => x.DocumentType == 2)?.DocumentNumber</p>
+        }
+        else
+        {
+            <p>@DealModel?.Client?.PinNumber</p>
+        }
+    </div>
+    <div class="with-underline">
+        <h6> @("Client.Beneficiary".Translate())</h6>
+        <p>@OfferModel?.Beneficiary?.FullConcatName</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.PaymentTypeOid".Translate())</h6>
+        <p>@OfferModel?.PaymentType</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.CurrencyOid".Translate())</h6>
+        <p>@OfferModel?.Currency</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.PolicyPeriodOid".Translate())</h6>
+        <p>@OfferModel?.PolicyPeriod</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("DropDown.InsuranceAreaType".Translate())</h6>
+        <p>@OfferModel?.InsuranceAreaTypeDisplayValue</p>
+    </div>
+    @if (DealModel?.Client?.ClientType == ClientType.Company)
+    {
+        <div class="with-underline">
+            <h6>@("OfferModel.CompanyActivityType".Translate())</h6>
+            <p>@OfferModel?.CompanyActivityType</p>
+        </div>
+    }
+    <div class="with-underline">
+        <p>
+            <h6>@("OfferModel.AnyInfo".Translate())</h6>
+            @OfferModel?.AnyInfo
+        </p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.SumInsured".Translate())</h6>
+        <p>@DealModel?.SumInsured</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("LanguageSelection".Translate())</h6>
+        <p>@DealModel?.OfferLang</p>
+    </div>
+
+    <div class="with-underline">
+        <h6> @("DealMode.ClientPhoneNumber".Translate())</h6>
+        <p>@DealModel?.ClientPhoneNumber</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("DealMode.SurveyContactInfo".Translate())</h6>
+        <p>@DealModel?.SurveyContactInfo</p>
+    </div>
+    <div class="with-underline">
+        <p>
+            <h6> @("OfferModel.ActivityFeatures".Translate())</h6>
+            @OfferModel?.ActivityFeatures
+        </p>
+    </div>
+    @********@
+    <div class="with-underline">
+        <h6> @("OfferModel.LocalCompanyFoundDate".Translate())</h6>
+        <p>@OfferModel?.LocalCompanyFoundDate?.ToString("dd.MM.yyyyy")</p>
+    </div>
+
+    <div class="with-underline">
+        <p>
+            <h6> @("OfferModel.AllCompanyNames".Translate())</h6>
+            @OfferModel?.AllCompanyNames
+        </p>
+    </div>
+
+    <div class="with-underline">
+        <h6>@("OfferModel.IsSituationGood".Translate())</h6>
+        <div class="checkbox-group">
+            @if (OfferModel?.IsSituationGood == true)
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="with-underline">
+        <p>
+            <h6>@("OfferModel.ExplainProducts".Translate())</h6>
+            @OfferModel?.ExplainProducts
+        </p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.QualityCheck".Translate())</h6>
+        <div class="checkbox-group">
+            @if (OfferModel?.QualityCheck == true)
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.IsAnyProductDangerous".Translate())</h6>
+        <div class="checkbox-group">
+            @if (OfferModel?.IsAnyProductDangerous == true)
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @if (OfferModel?.IsAnyProductDangerous == true)
+    {
+        <div class="with-underline">
+            <p>
+                <h6>@("OfferModel.IsAnyProductDangerous".Translate())</h6>
+                @OfferModel?.ExplainDangerousProduct
+            </p>
+        </div>
+    }
+
+    <div class="with-underline">
+        <h6> @("OfferModel.NumberOfEmployees".Translate())</h6>
+        <p>@OfferModel?.NumberOfEmployees</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.IsAnyDirtAround".Translate())</h6>
+        <div class="checkbox-group">
+            @if (OfferModel?.IsAnyDirtAround == true)
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="checkbox-container">
+                    <div class="checkbox-container">
+                        <div class="checkbox "></div>
+                        <span>@("OfferModel.Yes".Translate())</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="checkbox checked"></div>
+                        <span>@("OfferModel.No".Translate())</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.LimitPerAccident".Translate())</h6>
+        <p>@OfferModel?.LimitPerAccident</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.AnnualGeneralLimit".Translate())</h6>
+        <p>@OfferModel?.AnnualGeneralLimit</p>
+    </div>
+    <div class="with-underline">
+        <h6>@("OfferModel.AnnualTurnoverOfCompany".Translate())</h6>
+        <p>@OfferModel?.AnnualTurnoverOfCompany</p>
+    </div>
+    <div class="with-underline">
+        <p>
+            <h6> @("OfferModel.CurrentYearSales".Translate())</h6>
+            @OfferModel?.CurrentYearSales
+        </p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.UnconditionalExemptionAmount".Translate())</h6>
+        <p>@OfferModel?.UnconditionalExemptionAmount</p>
+    </div>
+    <div class="with-underline">
+        <h6> @("OfferModel.LossHistory".Translate())</h6>
+        <p>@OfferModel?.LossHistory</p>
+    </div>
+
+    <div class="sign-area">
+
+        <div class="sign-title-container">
+            <h6 class="sign-title">@LocalizationExtension.Translate("CardComponent.OnlyInsured")</h6>
+            <span>@DealModel?.Client?.FullConcatName</span>
+        </div>
+
+        <div class="sign-container">
+            <span>@LocalizationExtension.Translate("CardComponent.OnlyInsured")</span>
+            <div class="sign-line"></div>
+            <span>@LocalizationExtension.Translate("CardComponent.Signature")</span>
+        </div>
+    </div>
+
+
+</div>
+
+

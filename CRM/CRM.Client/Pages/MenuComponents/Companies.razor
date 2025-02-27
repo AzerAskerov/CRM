@@ -1,0 +1,81 @@
+﻿@page "/companies"
+@page "/companies/{inn}"
+@inherits BaseComponent
+@using CRM.Operation.Models
+@attribute [Authorize]
+@inject IComponentService Compo;
+
+<CustomTitle Main="Companies" ButtonText="@("Button.AddClient".Translate())"
+             ButtonClick="@(() => { ComponentParameters param = new ComponentParameters();
+                          param.Add(nameof(CompanyCard.ClientContractModel), new ClientContract());
+                          Compo.Show<CompanyCard>("Contact", param); })" SearchPlaceHolder="search">
+    <SearchBody>
+        <EditForm Model="@CompanySearchModel" OnValidSubmit="@(()=>SearchAsync(CompanySearchModel, MetaData))">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <input class="main-filter-search" type="text" placeholder="@("Search".Translate())">
+
+
+            <div class="main-ui-item-icon-block main-ui-show">
+                <span class="main-ui-item-icon main-ui-search"></span>
+                <span class="main-ui-item-icon main-ui-delete"></span>
+            </div>
+
+            <div class="search-popup-main col-lg-12 col-md-12 col-sm-12 row m-0 shadow-lg" id="search-popup-mainId">
+                <i class="fas fa-times close-popup-setting"></i>
+                <div class="col-3 popup-search-filter-main">
+                    <h6 class="text-uppercase text-center">@("Search.SearchCriteria".Translate())</h6>
+                </div>
+                <div class="col-12 popup-search-inputs-main">
+                    <div class="row py-3">
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("FullName".Translate())</span>
+                            <InputText @bind-Value="CompanySearchModel.FullName" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("TinNumber".Translate())</span>
+                            <InputText @bind-Value="CompanySearchModel.TinNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("DocumentNumber".Translate())</span>
+                            <InputText @bind-Value="CompanySearchModel.DocumentNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("PhoneNumber".Translate())</span>
+                            <InputText @bind-Value="CompanySearchModel.PhoneNumber" class="form-control"></InputText>
+                        </div>
+                        <div class="col-4 py-1">
+                            <span class="label-input-setting">@("RegNumber".Translate())</span>
+                            <InputText @bind-Value="CompanySearchModel.RegNumber" class="form-control"></InputText>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="save-company">
+                        <button class="save-company-setting-button" type="submit">@("Search".Translate())</button>
+
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </SearchBody>
+</CustomTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="content-contact-page">
+            <Indicator Context="companies">
+                <Grid Items="@companies" class="table">
+                    <GridColumnCommand Actions="actions"></GridColumnCommand>
+                    <GridColumn TRowData="CompanyListItemModel" Expression="c=>c.CompanyName"></GridColumn>
+                    <GridColumn TRowData="CompanyListItemModel" Expression="c=>c.TinNumber"></GridColumn>
+                </Grid>
+            </Indicator>
+            <div class="row">
+                <div class="col">
+                    <CustomPagination MetaData="MetaData" Spread="10" SelectedPage="@SelectedPage" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
